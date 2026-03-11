@@ -9,14 +9,13 @@ public class Student {
     private final String name;
     private final String facultyNumber;
     private final int course;
-    private final String specialty;
+    private final Specialty specialty;
     private final int group;
     private StudentStatus status;
     private final double averageGrade;
     private final List<Grade> grades;
 
-    public Student(String name, String facultyNumber, int course, String specialty, int group,
-                   StudentStatus status, double averageGrade, List<Grade> grades) {
+    public Student(String name, String facultyNumber, int course, Specialty specialty, int group, double averageGrade) {
         this.name = name;
         this.facultyNumber = facultyNumber;
         this.course = course;
@@ -39,7 +38,7 @@ public class Student {
         return course;
     }
 
-    public String getSpecialty() {
+    public Specialty getSpecialty() {
         return specialty;
     }
 
