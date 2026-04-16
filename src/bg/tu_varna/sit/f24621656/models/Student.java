@@ -3,6 +3,7 @@ package bg.tu_varna.sit.f24621656.models;
 import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Student {
     private final String name;
@@ -23,8 +24,8 @@ public class Student {
         this.group = group;
         this.status = StudentStatus.ENROLLED;
         this.averageGrade = 0.0;
-        this.grades = new ArrayList<>(Grade);
-        this.enrolledDisciplines = new ArrayList<>(Discipline);
+        this.grades = new ArrayList<>();
+        this.enrolledDisciplines = new ArrayList<>();
     }
 
     //getters
