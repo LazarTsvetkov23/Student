@@ -1,7 +1,5 @@
 package bg.tu_varna.sit.f24621656.models;
 
-import bg.tu_varna.sit.f24621656.enums.DisciplineType;
-
 public class Grade {
     private final Discipline name;
     private final double value;
