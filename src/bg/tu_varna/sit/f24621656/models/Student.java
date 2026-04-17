@@ -14,9 +14,9 @@ public class Student {
     private StudentStatus status;
     private final double averageGrade;
     private final List<Grade> grades;
-    private final List<Discipline> enrolledDisciplines;
+    private final List<Discipline> enrolledDisciplines;          // записани, но без оценка
 
-    public Student(String name, String facultyNumber, int course, Specialty specialty, int group, StudentStatus status, double averageGrade) {
+    public Student(String name, String facultyNumber, int course, Specialty specialty, int group) {
         this.name = name;
         this.facultyNumber = facultyNumber;
         this.course = course;
@@ -28,7 +28,7 @@ public class Student {
         this.enrolledDisciplines = new ArrayList<>();
     }
 
-    //getters
+    // Getters
     public String getName() {
         return name;
     }
@@ -65,7 +65,7 @@ public class Student {
         return enrolledDisciplines;
     }
 
-    //setters
+    // Setters (за променливите, които не са final)
     public void setCourse(int course) {
         this.course = course;
     }
@@ -80,5 +80,18 @@ public class Student {
 
     public void setStatus(StudentStatus status) {
         this.status = status;
+    }
+
+    // Добавя оценка (ако дисциплината е записана)
+    public boolean addGrade(Grade grade) {
+        if(status != StudentStatus.ENROLLED) {
+            return false;       // прекъснал или завършил не може да добавя оценки
+        }
+        // Проверка дали дисциплината е записана
+        if(enrolledDisciplines.contains(grade.getName())) {
+            grades.add(grade);
+            return true;
+        }
+        return false;
     }
 }
