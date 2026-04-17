@@ -8,8 +8,8 @@ import java.util.List;
 public class Discipline {
     private final String name;
     private final DisciplineType type;
-    private int credits;
-    private final List<Integer> availableCourses;
+    private int credits;                                        // само за избираеми (за задължителни може да е 0)
+    private final List<Integer> availableCourses;               // в кои курсове може да се записва
 
     public Discipline(String name, DisciplineType type) {
         this.name = name;
