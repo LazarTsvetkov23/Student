@@ -1,15 +1,28 @@
 package bg.tu_varna.sit.f24621656.models;
 
 import bg.tu_varna.sit.f24621656.enums.DisciplineType;
-import bg.tu_varna.sit.f24621656.enums.StudentStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Discipline {
     private final String name;
     private final DisciplineType type;
+    private int credits;
+    private final List<Integer> availableCourses;
 
     public Discipline(String name, DisciplineType type) {
         this.name = name;
         this.type = type;
+        this.credits = 0;
+        this.availableCourses = new ArrayList<>();
+    }
+
+    public Discipline(String name, DisciplineType type, int credits, List<Integer> availableCourses) {
+        this.name = name;
+        this.type = type;
+        this.credits = credits;
+        this.availableCourses = new ArrayList<>(availableCourses);
     }
 
     public String getName() {
@@ -18,5 +31,27 @@ public class Discipline {
 
     public DisciplineType getType() {
         return type;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        if(type == DisciplineType.ELECTIVE) {
+            this.credits = credits;
+        }
+    }
+
+    public List<Integer> getAvailableCourses() {
+        return availableCourses;
+    }
+
+    public void addAvailableCourse(int course) {
+        availableCourses.add(course);
+    }
+
+    public boolean isAvailableForCourse(int course) {
+        return availableCourses.contains(course);
     }
 }
