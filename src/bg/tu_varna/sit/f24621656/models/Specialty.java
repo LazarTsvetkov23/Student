@@ -6,7 +6,7 @@ import java.util.List;
 public class Specialty {
     private final String name;
     private final List<Discipline> disciplines;
-    private int minElectiveCredits;
+    private int minElectiveCredits;                               // минимален брой кредити от избираеми за дипломиране
 
     public Specialty(String name) {
         this.name = name;
