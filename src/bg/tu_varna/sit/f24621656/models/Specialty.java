@@ -32,7 +32,9 @@ public class Specialty {
     }
 
     public void addDiscipline(Discipline discipline) {
-        disciplines.add(discipline);
+        if (!disciplines.contains(discipline)) {
+            disciplines.add(discipline);
+        }
     }
 
     public Discipline findDisciplineByName(String name) {
