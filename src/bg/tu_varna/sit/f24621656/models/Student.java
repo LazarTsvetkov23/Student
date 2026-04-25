@@ -84,9 +84,10 @@ public class Student {
     }
 
     private boolean hasGradeForDiscipline(Discipline discipline) {
-        for (Grade g : grades) {
-            if (g.getDisciplineName().equals(discipline))
+        for (Grade grade : grades) {
+            if (grade.getDisciplineName().equals(discipline)) {
                 return true;
+            }
         }
         return false;
     }
@@ -94,45 +95,61 @@ public class Student {
     private void recalculateAverageGrade() {
         double sum = 0;
         int count = 0;
-        for (Grade g : grades) {
-            sum += g.getValue(); count++;
+
+        for (Grade grade : grades) {
+            sum += grade.getValue();
+            count++;
         }
-        for (Discipline d : enrolledDisciplines) {
-            if (!hasGradeForDiscipline(d)) {
-                sum += 2.00; count++;
+        for (Discipline discipline : enrolledDisciplines) {
+            if (!hasGradeForDiscipline(discipline)) {
+                sum += 2.00;
+                count++;
             }
         }
-        averageGrade = count == 0 ? 0.0 : sum / count;
+        if(count == 0) {
+            averageGrade = 0.0;
+        } else {
+            averageGrade = sum / count;
+        }
     }
 
     public boolean addGrade(Grade grade) {
-        if (status != StudentStatus.ENROLLED)
+        if (status != StudentStatus.ENROLLED) {
             return false;
-        if (!enrolledDisciplines.contains(grade.getDisciplineName()))
+        }
+        if (!enrolledDisciplines.contains(grade.getDisciplineName())) {
             return false;
+        }
         grades.add(grade);
         recalculateAverageGrade();
         return true;
     }
 
     public boolean enrollInDiscipline(Discipline discipline) {
-        if (status != StudentStatus.ENROLLED)
+        if (status != StudentStatus.ENROLLED) {
             return false;
-        if (!discipline.isAvailableForCourse(course))
+        }
+        if (!discipline.isAvailableForCourse(course)) {
             return false;
-        if (!specialty.getDisciplines().contains(discipline))
+        }
+        if (!specialty.getDisciplines().contains(discipline)) {
             return false;
-        if (enrolledDisciplines.contains(discipline) || hasGradeForDiscipline(discipline))
+        }
+        if (enrolledDisciplines.contains(discipline) || hasGradeForDiscipline(discipline)) {
             return false;
+        }
         enrolledDisciplines.add(discipline);
         recalculateAverageGrade();
         return true;
     }
 
     public boolean canAdvanceToNextCourse() {
-        if (status != StudentStatus.ENROLLED)
+        if (status != StudentStatus.ENROLLED) {
             return false;
+        }
+
         int failed = 0;
+
         for (Discipline d : specialty.getDisciplines()) {
             if (d.getType() == DisciplineType.MANDATORY) {
                 boolean fromPrevCourses = false;
@@ -150,8 +167,9 @@ public class Student {
                             break;
                         }
                     }
-                    if (!passed)
+                    if (!passed) {
                         failed++;
+                    }
                 }
             }
         }
@@ -159,9 +177,9 @@ public class Student {
     }
 
     public boolean canGraduate() {
-        if (status != StudentStatus.ENROLLED)
+        if (status != StudentStatus.ENROLLED) {
             return false;
-
+        }
         for (Discipline discipline : specialty.getDisciplines()) {
             if (discipline.getType() == DisciplineType.MANDATORY) {
                 boolean passed = false;
@@ -171,8 +189,9 @@ public class Student {
                         break;
                     }
                 }
-                if (!passed)
+                if (!passed) {
                     return false;
+                }
             }
         }
 
@@ -184,14 +203,16 @@ public class Student {
                     break;
                 }
             }
-            if (!passed)
+            if (!passed) {
                 return false;
+            }
         }
         return true;
     }
 
     public int getEarnedElectiveCredits() {
         int credits = 0;
+
         for (Grade grade : grades) {
             Discipline discipline = grade.getDisciplineName();
             if (discipline.getType() == DisciplineType.ELECTIVE && grade.isPassed()) {
@@ -208,8 +229,9 @@ public class Student {
     public List<Grade> getPassedExams() {
         List<Grade> result = new ArrayList<>();
         for (Grade grade : grades) {
-            if (grade.isPassed())
+            if (grade.isPassed()) {
                 result.add(grade);
+            }
         }
         return result;
     }
@@ -224,15 +246,17 @@ public class Student {
                     break;
                 }
             }
-            if (!hasPassed)
+            if (!hasPassed) {
                 result.add(discipline);
+            }
         }
         return result;
     }
 
     public boolean canChangeToSpecialty(Specialty newSpecialty) {
-        if (status != StudentStatus.ENROLLED)
+        if (status != StudentStatus.ENROLLED) {
             return false;
+        }
         for (Discipline discipline : newSpecialty.getDisciplines()) {
             if (discipline.getType() == DisciplineType.MANDATORY) {
                 boolean fromPrevCourses = false;
@@ -250,8 +274,9 @@ public class Student {
                             break;
                         }
                     }
-                    if (!passed)
+                    if (!passed) {
                         return false;
+                    }
                 }
             }
         }
@@ -260,10 +285,12 @@ public class Student {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         Student that = (Student) o;
         return Objects.equals(facultyNumber, that.facultyNumber);
     }
