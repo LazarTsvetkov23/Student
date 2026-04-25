@@ -2,22 +2,17 @@ package bg.tu_varna.sit.f24621656.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Specialty {
     private final String name;
     private final List<Discipline> disciplines;
-    private int minElectiveCredits;                               // минимален брой кредити от избираеми за дипломиране
+    private int minElectiveCredits;
 
     public Specialty(String name) {
         this.name = name;
         this.disciplines = new ArrayList<>();
         this.minElectiveCredits = 0;
-    }
-
-    public Specialty(String name, int minElectiveCredits) {
-        this.name = name;
-        this.disciplines = new ArrayList<>();
-        this.minElectiveCredits = minElectiveCredits;
     }
 
     public String getName() {
@@ -39,4 +34,22 @@ public class Specialty {
     public void addDiscipline(Discipline discipline) {
         disciplines.add(discipline);
     }
+
+    public Discipline findDisciplineByName(String name) {
+        for(Discipline discipline : disciplines) {
+            if(discipline.getName().equalsIgnoreCase(name)) return discipline;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Specialty that = (Specialty) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() { return Objects.hash(name); }
 }
