@@ -150,10 +150,10 @@ public class Student {
 
         int failed = 0;
 
-        for (Discipline d : specialty.getDisciplines()) {
-            if (d.getType() == DisciplineType.MANDATORY) {
+        for (Discipline discipline : specialty.getDisciplines()) {
+            if (discipline.getType() == DisciplineType.MANDATORY) {
                 boolean fromPrevCourses = false;
-                for (int c : d.getAvailableCourses()) {
+                for (int c : discipline.getAvailableCourses()) {
                     if (c < course) {
                         fromPrevCourses = true;
                         break;
@@ -162,7 +162,7 @@ public class Student {
                 if (fromPrevCourses) {
                     boolean passed = false;
                     for (Grade grade : grades) {
-                        if (grade.getDisciplineName().equals(d) && grade.isPassed()) {
+                        if (grade.getDisciplineName().equals(discipline) && grade.isPassed()) {
                             passed = true;
                             break;
                         }
@@ -183,8 +183,8 @@ public class Student {
         for (Discipline discipline : specialty.getDisciplines()) {
             if (discipline.getType() == DisciplineType.MANDATORY) {
                 boolean passed = false;
-                for (Grade g : grades) {
-                    if (g.getDisciplineName().equals(discipline) && g.isPassed()) {
+                for (Grade grade : grades) {
+                    if (grade.getDisciplineName().equals(discipline) && grade.isPassed()) {
                         passed = true;
                         break;
                     }
@@ -284,14 +284,14 @@ public class Student {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object object) {
+        if (this == object) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        Student that = (Student) o;
+        Student that = (Student) object;
         return Objects.equals(facultyNumber, that.facultyNumber);
     }
 
