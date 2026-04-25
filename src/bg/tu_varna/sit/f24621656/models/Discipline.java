@@ -42,7 +42,9 @@ public class Discipline {
     }
 
     public void addAvailableCourse(int course) {
-        availableCourses.add(course);
+        if (!availableCourses.contains(course)) {
+            availableCourses.add(course);
+        }
     }
 
     public boolean isAvailableForCourse(int course) {
