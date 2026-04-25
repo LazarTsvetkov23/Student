@@ -16,4 +16,8 @@ public class Grade {
     public double getValue() {
         return value;
     }
+
+    public boolean isPassed() {
+        return value >= 3.00;
+    }
 }
