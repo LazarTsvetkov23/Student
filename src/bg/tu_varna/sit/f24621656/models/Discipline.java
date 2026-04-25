@@ -4,25 +4,19 @@ import bg.tu_varna.sit.f24621656.enums.DisciplineType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Discipline {
     private final String name;
     private final DisciplineType type;
-    private int credits;                                        // само за избираеми (за задължителни може да е 0)
-    private final List<Integer> availableCourses;               // в кои курсове може да се записва
+    private int credits;
+    private final List<Integer> availableCourses;
 
     public Discipline(String name, DisciplineType type) {
         this.name = name;
         this.type = type;
         this.credits = 0;
         this.availableCourses = new ArrayList<>();
-    }
-
-    public Discipline(String name, DisciplineType type, int credits, List<Integer> availableCourses) {
-        this.name = name;
-        this.type = type;
-        this.credits = credits;
-        this.availableCourses = new ArrayList<>(availableCourses);
     }
 
     public String getName() {
@@ -54,4 +48,15 @@ public class Discipline {
     public boolean isAvailableForCourse(int course) {
         return availableCourses.contains(course);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Discipline that = (Discipline) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() { return Objects.hash(name); }
 }
