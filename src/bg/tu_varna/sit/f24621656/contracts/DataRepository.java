@@ -10,7 +10,7 @@ public interface DataRepository {
     void addStudent(Student student);
     Student findStudentByFacultyNumber(String fn);
     List<Student> getAllStudents();
-    List<Student> getStudentsBySpecialtyAndCourse(String specialtyName, int year);
+    List<Student> getStudentsBySpecialtyAndCourse(String specialtyName, int course);
     List<Student> getStudentsForProtocol(Discipline discipline);
 
     void addSpecialty(Specialty specialty);
