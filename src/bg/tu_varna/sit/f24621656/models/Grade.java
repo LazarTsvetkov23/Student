@@ -10,7 +10,7 @@ package bg.tu_varna.sit.f24621656.models;
  * @version 1.0
  */
 public class Grade {
-    private final Discipline disciplineName;
+    private final Discipline discipline;
     private final double value;
 
     /**
@@ -20,13 +20,13 @@ public class Grade {
      * @param value числена стойност на оценката (2.00 - 6.00)
      */
     public Grade(Discipline disciplineName, double value) {
-        this.disciplineName = disciplineName;
+        this.discipline = disciplineName;
         this.value = value;
     }
 
     /** @return дисциплината */
-    public Discipline getDisciplineName() {
-        return disciplineName;
+    public Discipline getDiscipline() {
+        return discipline;
     }
 
     /** @return числената стойност на оценката */
