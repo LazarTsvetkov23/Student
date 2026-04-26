@@ -16,11 +16,11 @@ public class Grade {
     /**
      * Конструктор за оценка.
      *
-     * @param disciplineName дисциплината, по която е оценката
+     * @param discipline дисциплината, по която е оценката
      * @param value числена стойност на оценката (2.00 - 6.00)
      */
-    public Grade(Discipline disciplineName, double value) {
-        this.discipline = disciplineName;
+    public Grade(Discipline discipline, double value) {
+        this.discipline = discipline;
         this.value = value;
     }
 
