@@ -5,28 +5,41 @@ import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Имплементация на {@link DataRepository} с in-memory съхранение.
+ *
+ * <p>Този клас съхранява всички данни в списъци в паметта.
+ *
+ * @author Student
+ * @version 1.0
+ */
 public class University implements DataRepository {
     private final List<Student> students;
     private final List<Specialty> specialties;
     private final List<Discipline> disciplines;
 
+    /**
+     * Конструктор - инициализира празни списъци.
+     */
     public University() {
         this.students = new ArrayList<>();
         this.specialties = new ArrayList<>();
         this.disciplines = new ArrayList<>();
     }
 
+    // ==================== Student Operations ====================
+
     @Override
     public void addStudent(Student student) {
-        if(!students.contains(student)) {
+        if (!students.contains(student)) {
             students.add(student);
         }
     }
 
     @Override
-    public Student findStudentByFacultyNumber(String facultyNumber) {
-        for(Student student : students) {
-            if(student.getFacultyNumber().equals(facultyNumber)) {
+    public Student findStudentByFacultyNumber(String fn) {
+        for (Student student : students) {
+            if (student.getFacultyNumber().equals(fn)) {
                 return student;
             }
         }
@@ -41,9 +54,8 @@ public class University implements DataRepository {
     @Override
     public List<Student> getStudentsBySpecialtyAndCourse(String specialtyName, int course) {
         List<Student> result = new ArrayList<>();
-
         for (Student student : students) {
-            if(student.getSpecialty().getName().equalsIgnoreCase(specialtyName) && student.getCourse() == course) {
+            if (student.getSpecialty().getName().equalsIgnoreCase(specialtyName) && student.getCourse() == course) {
                 result.add(student);
             }
         }
@@ -53,16 +65,16 @@ public class University implements DataRepository {
     @Override
     public List<Student> getStudentsForProtocol(Discipline discipline) {
         List<Student> result = new ArrayList<>();
-
-        for(Student student : students) {
-            if(student.getEnrolledDisciplines().contains(discipline)) {
+        for (Student student : students) {
+            if (student.getEnrolledDisciplines().contains(discipline)) {
                 result.add(student);
             }
         }
 
-        for(int i = 0; i < result.size() - 1; i++) {
-            for(int j = 0; j < result.size() - i - 1; j++) {
-                if(result.get(j).getFacultyNumber().compareTo(result.get(j + 1).getFacultyNumber()) > 0) {
+        // Bubble sort by faculty number
+        for (int i = 0; i < result.size() - 1; i++) {
+            for (int j = 0; j < result.size() - i - 1; j++) {
+                if (result.get(j).getFacultyNumber().compareTo(result.get(j + 1).getFacultyNumber()) > 0) {
                     Student temp = result.get(j);
                     result.set(j, result.get(j + 1));
                     result.set(j + 1, temp);
@@ -72,9 +84,11 @@ public class University implements DataRepository {
         return result;
     }
 
+    // ==================== Specialty Operations ====================
+
     @Override
     public void addSpecialty(Specialty specialty) {
-        if(!specialties.contains(specialty)) {
+        if (!specialties.contains(specialty)) {
             specialties.add(specialty);
         }
     }
@@ -82,7 +96,7 @@ public class University implements DataRepository {
     @Override
     public Specialty findSpecialtyByName(String name) {
         for (Specialty specialty : specialties) {
-            if(specialty.getName().equalsIgnoreCase(name)) {
+            if (specialty.getName().equalsIgnoreCase(name)) {
                 return specialty;
             }
         }
@@ -94,9 +108,11 @@ public class University implements DataRepository {
         return new ArrayList<>(specialties);
     }
 
+    // ==================== Discipline Operations ====================
+
     @Override
     public void addDiscipline(Discipline discipline) {
-        if(!disciplines.contains(discipline)) {
+        if (!disciplines.contains(discipline)) {
             disciplines.add(discipline);
         }
     }
@@ -104,7 +120,7 @@ public class University implements DataRepository {
     @Override
     public Discipline findDisciplineByName(String name) {
         for (Discipline discipline : disciplines) {
-            if(discipline.getName().equalsIgnoreCase(name)) {
+            if (discipline.getName().equalsIgnoreCase(name)) {
                 return discipline;
             }
         }
@@ -115,6 +131,8 @@ public class University implements DataRepository {
     public List<Discipline> getAllDisciplines() {
         return new ArrayList<>(disciplines);
     }
+
+    // ==================== Common Operations ====================
 
     @Override
     public void clear() {
