@@ -53,6 +53,10 @@ public class AddSpecialtyCommand extends BaseCommand {
                 return CommandResult.error("Specialty name cannot contain only digits");
             }
 
+            if(name.trim().length() < 1) {
+                return CommandResult.error("Specialty name must be at least 2 characters long");
+            }
+
             if (repository.findSpecialtyByName(name) != null) {
                 return CommandResult.error("Specialty already exists: " + name);
             }
