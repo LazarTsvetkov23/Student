@@ -2,7 +2,7 @@ package bg.tu_varna.sit.f24621656.commands;
 
 import bg.tu_varna.sit.f24621656.contracts.Command;
 
-//WORK
+//WORKED
 
 public class ExitCommand implements Command {
     @Override

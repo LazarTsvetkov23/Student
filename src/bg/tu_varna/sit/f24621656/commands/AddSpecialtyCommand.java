@@ -3,6 +3,8 @@ package bg.tu_varna.sit.f24621656.commands;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+//WORKED
+
 public class AddSpecialtyCommand extends BaseCommand {
 
     public AddSpecialtyCommand(Session session) {
