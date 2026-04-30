@@ -6,7 +6,6 @@ import bg.tu_varna.sit.f24621656.session.Session;
 //WORKED
 
 public class AddSpecialtyCommand extends BaseCommand {
-
     public AddSpecialtyCommand(Session session) {
         super(session);
     }
@@ -14,13 +13,13 @@ public class AddSpecialtyCommand extends BaseCommand {
     @Override
     public CommandResult execute(String[] args) {
         try {
-            if (args.length != 3) {
-                return CommandResult.error("Usage: addspecialty <name> <minCredits>");
+            if (args.length < 3) {
+                return CommandResult.error("Usage: addspecialty \"<name>\" <minCredits>");
             }
             requireFileOpen();
 
-            // Последният аргумент е minCredits
             String minCreditsStr = args[args.length - 1];
+
             int minCredits;
             try {
                 minCredits = Integer.parseInt(minCreditsStr);
@@ -32,8 +31,9 @@ public class AddSpecialtyCommand extends BaseCommand {
                 return CommandResult.error("Min credits cannot be negative");
             }
 
-            // Всички аргументи от 1 до предпоследния са името на специалността
+            // Името трябва да е в кавички – събираме от args[1] до args[args.length-2]
             StringBuilder nameBuilder = new StringBuilder();
+
             for (int i = 1; i < args.length - 1; i++) {
                 if (i > 1) {
                     nameBuilder.append(" ");
@@ -42,27 +42,32 @@ public class AddSpecialtyCommand extends BaseCommand {
             }
             String rawName = nameBuilder.toString();
 
-            // Премахване на кавички, ако има
-            String name = removeQuotes(rawName);
+            // Проверка за кавички
+            if(!rawName.startsWith("\"") || !rawName.endsWith("\"")) {
+                return CommandResult.error("Specialty name must be enclosed in quotes: \"<name>\"");
+            }
 
+            // Премахване на кавичките
+            String name = rawName.substring(1, rawName.length() - 1);
+
+            // Валидация на името
             if (name == null || name.trim().isEmpty()) {
                 return CommandResult.error("Specialty name cannot be empty");
             }
 
-            if(isOnlyDigits(name)) {
-                return CommandResult.error("Specialty name cannot contain only digits");
-            }
+            name = name.trim();
 
-            if(name.trim().length() < 1) {
+            if (name.length() < 2) {
                 return CommandResult.error("Specialty name must be at least 2 characters long");
             }
 
-            if (repository.findSpecialtyByName(name) != null) {
-                return CommandResult.error("Specialty already exists: " + name);
+            if (isOnlyDigits(name)) {
+                return CommandResult.error("Specialty name cannot contain only digits");
             }
 
-            if (!isValidSpecialtyName(name)) {
-                return CommandResult.error("Specialty name contains invalid characters. Use letters, digits, spaces, hyphens or dots");
+            // Проверка за съществуваща специалност
+            if (repository.findSpecialtyByName(name) != null) {
+                return CommandResult.error("Specialty already exists: " + name);
             }
 
             Specialty specialty = new Specialty(name, minCredits);
@@ -74,26 +79,6 @@ public class AddSpecialtyCommand extends BaseCommand {
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());
         }
-    }
-
-    private String removeQuotes(String text) {
-        if(text == null) {
-            return null;
-        }
-
-        String trimmed = text.trim();
-
-        // Ако започва и завършва с кавички, премахваме ги
-        if (trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
-            String result = trimmed.substring(1, trimmed.length() - 1);
-            // Ако след премахване на кавичките остане празен низ
-            if (result.trim().isEmpty()) {
-                return null;
-            }
-            return result;
-        }
-
-        return trimmed;
     }
 
     private boolean isOnlyDigits(String text) {
@@ -108,35 +93,14 @@ public class AddSpecialtyCommand extends BaseCommand {
         return true;
     }
 
-    private boolean isValidSpecialtyName(String name) {
-        if (name == null || name.isEmpty()) {
-            return false;
-        }
-
-        for (char c : name.toCharArray()) {
-            // Позволени символи:
-            // - Букви (латински и български)
-            // - Цифри
-            // - Интервал (space)
-            // - Тире (-)
-            // - Точка (.)
-            // - Амперсанд (&)
-            if (Character.isLetterOrDigit(c) || c == ' ' || c == '-' || c == '.' || c == '&') {
-                continue;
-            }
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String getUsage() {
-        return "addspecialty <name> <minCredits>";
+        return "addspecialty \"<name>\" <minCredits>";
     }
 
     @Override
     public String getDescription() {
-        return "Adds a new specialty";
+        return "Adds a new specialty (name must be in quotes)";
     }
 
     @Override
