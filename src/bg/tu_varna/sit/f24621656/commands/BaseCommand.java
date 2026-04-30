@@ -1,21 +1,23 @@
 package bg.tu_varna.sit.f24621656.commands;
 
 import bg.tu_varna.sit.f24621656.contracts.Command;
+import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import bg.tu_varna.sit.f24621656.session.Session;
 
 public abstract class BaseCommand implements Command {
-    private final Session session;
+    protected final Session session;
+    protected final DataRepository repository;
 
     public BaseCommand(Session session) {
+        if (session == null) {
+            throw new IllegalArgumentException("Session cannot be null");
+        }
         this.session = session;
-    }
-
-    protected Session getSession() {
-        return session;
+        this.repository = session.getRepository();
     }
 
     protected void validateArgs(String[] args, int minCount, int maxCount) throws IllegalArgumentException {
-        if(args.length < minCount) {
+        if (args.length < minCount) {
             throw new IllegalArgumentException("Missing arguments. Usage: " + getUsage());
         }
         if (maxCount > 0 && args.length > maxCount) {
@@ -23,21 +25,13 @@ public abstract class BaseCommand implements Command {
         }
     }
 
-    protected void validateFileOpen() throws IllegalArgumentException {
+    protected void validateArgs(String[] args, int exactCount) throws IllegalArgumentException {
+        validateArgs(args, exactCount, exactCount);
+    }
+
+    protected void requireFileOpen() throws IllegalStateException {
         if (!session.isFileOpen()) {
-            throw new IllegalArgumentException("No file is open. Use 'open' first.");
+            throw new IllegalStateException("No file is open. Use 'open' first.");
         }
-    }
-
-    protected void printSuccess(String message) {
-        System.out.println("Success: " + message);
-    }
-
-    protected void printError(String message) {
-        System.out.println("Error: " + message);
-    }
-
-    protected void printInfo(String message) {
-        System.out.println(message);
     }
 }
