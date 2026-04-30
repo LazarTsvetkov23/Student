@@ -5,22 +5,11 @@ import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Имплементация на {@link DataRepository} с in-memory съхранение.
- *
- * <p>Този клас съхранява всички данни в списъци в паметта.
- *
- * @author Student
- * @version 1.0
- */
 public class University implements DataRepository {
     private final List<Student> students;
     private final List<Specialty> specialties;
     private final List<Discipline> disciplines;
 
-    /**
-     * Конструктор - инициализира празни списъци.
-     */
     public University() {
         this.students = new ArrayList<>();
         this.specialties = new ArrayList<>();
@@ -37,9 +26,9 @@ public class University implements DataRepository {
     }
 
     @Override
-    public Student findStudentByFacultyNumber(String fn) {
+    public Student findStudentByFacultyNumber(String facultyNumber) {
         for (Student student : students) {
-            if (student.getFacultyNumber().equals(fn)) {
+            if (student.getFacultyNumber().equals(facultyNumber)) {
                 return student;
             }
         }
@@ -65,6 +54,7 @@ public class University implements DataRepository {
     @Override
     public List<Student> getStudentsForProtocol(Discipline discipline) {
         List<Student> result = new ArrayList<>();
+
         for (Student student : students) {
             if (student.getEnrolledDisciplines().contains(discipline)) {
                 result.add(student);
@@ -94,6 +84,11 @@ public class University implements DataRepository {
     }
 
     @Override
+    public void removeSpecialty(Specialty specialty) {
+            specialties.remove(specialty);
+    }
+
+    @Override
     public Specialty findSpecialtyByName(String name) {
         for (Specialty specialty : specialties) {
             if (specialty.getName().equalsIgnoreCase(name)) {
@@ -115,6 +110,11 @@ public class University implements DataRepository {
         if (!disciplines.contains(discipline)) {
             disciplines.add(discipline);
         }
+    }
+
+    @Override
+    public void removeDiscipline(Discipline discipline) {
+        disciplines.remove(discipline);
     }
 
     @Override
