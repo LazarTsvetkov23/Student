@@ -2,7 +2,6 @@ package bg.tu_varna.sit.f24621656.models;
 
 import bg.tu_varna.sit.f24621656.enums.DisciplineType;
 import bg.tu_varna.sit.f24621656.enums.StudentStatus;
-import bg.tu_varna.sit.f24621656.validators.DisciplineEnrollmentValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,59 +31,20 @@ public class Student {
         recalculateAverageGrade();
     }
 
-    // Getters
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
+    public String getFacultyNumber() { return facultyNumber; }
+    public int getCourse() { return course; }
+    public Specialty getSpecialty() { return specialty; }
+    public int getGroup() { return group; }
+    public StudentStatus getStatus() { return status; }
+    public List<Grade> getGrades() { return grades; }
+    public List<Discipline> getEnrolledDisciplines() { return enrolledDisciplines; }
+    public double getAverageGrade() { return averageGrade; }
 
-    public String getFacultyNumber() {
-        return facultyNumber;
-    }
-
-    public int getCourse() {
-        return course;
-    }
-
-    public Specialty getSpecialty() {
-        return specialty;
-    }
-
-    public int getGroup() {
-        return group;
-    }
-
-    public StudentStatus getStatus() {
-        return status;
-    }
-
-    public List<Grade> getGrades() {
-        return grades;
-    }
-
-    public List<Discipline> getEnrolledDisciplines() {
-        return enrolledDisciplines;
-    }
-
-    public double getAverageGrade() {
-        return averageGrade;
-    }
-
-    // Setters
-    public void setCourse(int course) {
-        this.course = course;
-    }
-
-    public void setSpecialty(Specialty specialty) {
-        this.specialty = specialty;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
-    }
-
-    public void setStatus(StudentStatus status) {
-        this.status = status;
-    }
+    public void setCourse(int course) { this.course = course; }
+    public void setSpecialty(Specialty specialty) { this.specialty = specialty; }
+    public void setGroup(int group) { this.group = group; }
+    public void setStatus(StudentStatus status) { this.status = status; }
 
     private boolean hasGradeForDiscipline(Discipline discipline) {
         for (Grade grade : grades) {
@@ -136,7 +96,6 @@ public class Student {
         }
         grades.add(grade);
         recalculateAverageGrade();
-
         return true;
     }
 
@@ -146,7 +105,6 @@ public class Student {
         }
         enrolledDisciplines.add(discipline);
         recalculateAverageGrade();
-
         return true;
     }
 
@@ -207,14 +165,8 @@ public class Student {
     public int getRemainingElectiveCredits() {
         int needed = specialty.getMinElectiveCredits();
         int earned = getEarnedElectiveCredits();
-
         int remaining = needed - earned;
-
-        if (remaining > 0) {
-            return remaining;
-        } else {
-            return 0;
-        }
+        return (remaining > 0) ? remaining : 0;
     }
 
     public List<Grade> getPassedExams() {
@@ -229,10 +181,8 @@ public class Student {
 
     public List<Discipline> getFailedExams() {
         List<Discipline> result = new ArrayList<>();
-
         for (Discipline discipline : enrolledDisciplines) {
             Grade grade = getGradeForDiscipline(discipline);
-
             if (grade == null || !grade.isPassed()) {
                 result.add(discipline);
             }
@@ -242,14 +192,9 @@ public class Student {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
         Student that = (Student) object;
-
         return Objects.equals(facultyNumber, that.facultyNumber);
     }
 
