@@ -21,7 +21,14 @@ public class CloseCommand extends BaseCommand {
 
             session.closeFile();
 
-            return CommandResult.success("Successfully closed " + fileName);
+            String shortName = fileName;
+            if (shortName.contains("/")) {
+                shortName = shortName.substring(shortName.lastIndexOf("/") + 1);
+            } else if (shortName.contains("\\")) {
+                shortName = shortName.substring(shortName.lastIndexOf("\\") + 1);
+            }
+
+            return CommandResult.success("Successfully closed " + shortName);
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());
