@@ -14,26 +14,46 @@ public class HelpCommand implements Command {
     @Override
     public CommandResult execute(String[] args) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n=========================================\n");
-        sb.append("Available Commands\n");
-        sb.append("=========================================\n");
-
-        sb.append("FILE COMMANDS:\n");
-        sb.append("  open <file>.xml                        - Opens XML files\n");
-        sb.append("  save                                   - Saves all data to XML files\n\n");
-        //TODO: sb.append("  close                                - Closes the currently open file\n\n");
-
-        sb.append("SPECIALTY COMMANDS:\n");
-        sb.append("  addspecialty <name> <minCredits> - Adds a new specialty\n\n");
-
-        //TODO: sb.append("STUDENT COMMANDS:\n");
-        //TODO: sb.append("  enroll <fn> <program> <group> <name> - Enrolls a student\n");
-        //TODO: sb.append("  print <fn>     - Prints student information\n\n");
-
-        sb.append("OTHER COMMANDS:\n");
-        sb.append("  help            - Shows this help message\n");
-        sb.append("  exit            - Exits the program\n");
-        sb.append("=========================================\n");
+        sb.append("\n╔════════════════════════════════════════════════════════════════════════════════════╗\n");
+        sb.append("║                                  AVAILABLE COMMANDS                                  ║\n");
+        sb.append("╠══════════════════════════════════════════════════════════════════════════════════════╣\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("║    FILE COMMANDS:                                                                    ║\n");
+        sb.append("║    open <file>                           - Opens a single XML file                   ║\n");
+        sb.append("║    openall                               - Opens all XML files                       ║\n");
+        sb.append("║    save                                  - Saves the currently open file             ║\n");
+        sb.append("║    saveall                               - Saves all XML files                       ║\n");
+        sb.append("║    close                                 - Closes the currently open file            ║\n");
+        sb.append("║    help                                  - Shows this help message                   ║\n");
+        sb.append("║    exit                                  - Exits the program                         ║\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("║    SPECIALTY COMMANDS:                                                               ║\n");
+        sb.append("║    addspecialty \"<name>\" <minCredits>    - Adds a new specialty                    ║\n");
+        sb.append("║    listspecialties                       - Lists all specialties                     ║\n");
+        sb.append("║    removespecialty \"<name>\"              - Removes a specialty                     ║\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("║    DISCIPLINE COMMANDS:                                                              ║\n");
+        sb.append("║    adddiscipline <name> <type> <credits> <courses> - Adds a discipline               ║\n");
+        sb.append("║    listdisciplines                       - Lists all disciplines                     ║\n");
+        sb.append("║    removediscipline <name>               - Removes a discipline                      ║\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("║    STUDENT COMMANDS:                                                                 ║\n");
+        sb.append("║    enroll <fn> <program> <group> <name>  - Enrolls a student                         ║\n");
+        sb.append("║    print <fn>                            - Prints student information                ║\n");
+        sb.append("║    printall <program> <year>             - Prints all students in program/year       ║\n");
+        sb.append("║    advance <fn>                          - Advances student to next course           ║\n");
+        sb.append("║    graduate <fn>                         - Marks student as graduated                ║\n");
+        sb.append("║    interrupt <fn>                        - Interrupts a student                      ║\n");
+        sb.append("║    resume <fn>                           - Resumes an interrupted student            ║\n");
+        sb.append("║    change <fn> <option> <value>          - Changes program/group/year                ║\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("║    GRADE COMMANDS:                                                                   ║\n");
+        sb.append("║    enrollin <fn> <course>                - Enrolls student in discipline             ║\n");
+        sb.append("║    addgrade <fn> <course> <grade>        - Adds a grade for a student                ║\n");
+        sb.append("║    protocol <course>                     - Shows protocol for a discipline           ║\n");
+        sb.append("║    report <fn>                           - Shows academic report for a student       ║\n");
+        sb.append("║                                                                                      ║\n");
+        sb.append("╚══════════════════════════════════════════════════════════════════════════════════════╝\n");
 
         return CommandResult.success(sb.toString());
     }
