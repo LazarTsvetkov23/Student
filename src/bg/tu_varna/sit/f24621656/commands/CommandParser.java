@@ -20,7 +20,9 @@ public class CommandParser {
         registerCommand(new OpenAllCommand(session));
         registerCommand(new SaveCommand(session));
         registerCommand(new SaveAllCommand(session));
+        registerCommand(new SaveAsCommand(session));
         registerCommand(new CloseCommand(session));
+        registerCommand(new CloseAllCommand(session));
 
         // Specialty commands
         registerCommand(new AddSpecialtyCommand(session));
