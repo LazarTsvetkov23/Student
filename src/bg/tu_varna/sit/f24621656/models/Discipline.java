@@ -19,27 +19,15 @@ public class Discipline {
         this.availableCourses = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public DisciplineType getType() {
-        return type;
-    }
-
-    public int getCredits() {
-        return credits;
-    }
-
+    public String getName() { return name; }
+    public DisciplineType getType() { return type; }
+    public int getCredits() { return credits; }
     public void setCredits(int credits) {
         if (type == DisciplineType.ELECTIVE) {
             this.credits = credits;
         }
     }
-
-    public List<Integer> getAvailableCourses() {
-        return availableCourses;
-    }
+    public List<Integer> getAvailableCourses() { return availableCourses; }
 
     public void addAvailableCourse(int course) {
         if (!availableCourses.contains(course)) {
@@ -49,23 +37,16 @@ public class Discipline {
 
     public boolean isAvailableForCourse(int course) {
         for (int c : availableCourses) {
-            if (c == course) {
-                return true;
-            }
+            if (c == course) return true;
         }
         return false;
     }
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
         Discipline that = (Discipline) object;
-
         return Objects.equals(name, that.name);
     }
 
