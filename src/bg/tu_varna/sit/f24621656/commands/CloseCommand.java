@@ -21,7 +21,7 @@ public class CloseCommand extends BaseCommand {
 
             session.closeFile();
 
-            return CommandResult.success("Successfully closed " + fileName + ".xml");
+            return CommandResult.success("Successfully closed " + fileName);
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());

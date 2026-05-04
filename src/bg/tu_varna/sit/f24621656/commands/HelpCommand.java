@@ -16,7 +16,7 @@ public class HelpCommand implements Command {
         StringBuilder sb = new StringBuilder();
         sb.append("\n=========================================\n");
         sb.append("Available Commands\n");
-        sb.append("=========================================\n\n");
+        sb.append("=========================================\n");
 
         sb.append("FILE COMMANDS:\n");
         sb.append("  open <file>.xml                        - Opens XML files\n");
