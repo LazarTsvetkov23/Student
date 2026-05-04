@@ -6,13 +6,13 @@ public class Session {
     private final DataRepository repository;
     private String currentFilePath;
     private boolean isFileOpen;
-    private boolean isHasUnsavedChanges;
+    private boolean hasUnsavedChanges;
 
     public Session(DataRepository repository) {
         this.repository = repository;
         this.currentFilePath = null;
         this.isFileOpen = false;
-        this.isHasUnsavedChanges = false;
+        this.hasUnsavedChanges = false;
     }
 
     public DataRepository getRepository() {
@@ -35,21 +35,22 @@ public class Session {
         isFileOpen = fileOpen;
     }
 
-    public boolean isHasUnsavedChanges() {
-        return isHasUnsavedChanges;
+    public boolean hasUnsavedChanges() {
+        return hasUnsavedChanges;
     }
 
-    public void setHasUnsavedChanges(boolean isHasUnsavedChanges) {
-        this.isHasUnsavedChanges = isHasUnsavedChanges;
+    public void setHasUnsavedChanges(boolean hasUnsavedChanges) {
+        this.hasUnsavedChanges = hasUnsavedChanges;
     }
 
     public void closeFile() {
-        if(!isFileOpen) {
+        if (!isFileOpen) {
             return;
         }
+
         repository.clear();
         currentFilePath = null;
         isFileOpen = false;
-        isHasUnsavedChanges = false;
+        hasUnsavedChanges = false;
     }
 }
