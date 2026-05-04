@@ -16,7 +16,7 @@ public class CloseCommand extends BaseCommand {
             String fileName = session.getCurrentFilePath();
 
             if (session.hasUnsavedChanges()) {
-                return CommandResult.error("Cannot close: You have unsaved changes! Use 'save' first.");
+                return CommandResult.error("⚠️ Cannot close: You have unsaved changes! Use 'save' first.");
             }
 
             session.closeFile();
@@ -28,7 +28,7 @@ public class CloseCommand extends BaseCommand {
                 shortName = shortName.substring(shortName.lastIndexOf("\\") + 1);
             }
 
-            return CommandResult.success("Successfully closed " + shortName);
+            return CommandResult.success("🔒 Successfully closed " + shortName);
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());

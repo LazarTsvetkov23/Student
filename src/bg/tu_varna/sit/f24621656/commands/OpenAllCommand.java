@@ -86,11 +86,17 @@ public class OpenAllCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() { return "openall"; }
+    public String getUsage() {
+        return "openall";
+    }
 
     @Override
-    public String getDescription() { return "Opens all files (loads existing ones, creates none)"; }
+    public String getDescription() {
+        return "Opens all files (loads existing ones, creates none)";
+    }
 
     @Override
-    public String getName() { return "openall"; }
+    public String getName() {
+        return "openall";
+    }
 }

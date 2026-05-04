@@ -19,26 +19,28 @@ public class RemoveDisciplineCommand extends BaseCommand {
 
             StringBuilder nameBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++) {
-                if (i > 1) nameBuilder.append(" ");
+                if (i > 1) {
+                    nameBuilder.append(" ");
+                }
                 nameBuilder.append(args[i]);
             }
             String name = nameBuilder.toString();
 
             Discipline discipline = repository.findDisciplineByName(name);
             if (discipline == null) {
-                return CommandResult.error("Discipline not found: " + name);
+                return CommandResult.error("❌ Discipline not found: " + name);
             }
 
             for (Student student : repository.getAllStudents()) {
                 if (student.getEnrolledDisciplines().contains(discipline)) {
-                    return CommandResult.error("Cannot remove discipline: There are students enrolled in " + name);
+                    return CommandResult.error("❌ Cannot remove discipline: There are students enrolled in " + name);
                 }
             }
 
             repository.removeDiscipline(discipline);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success("Removed discipline: " + name);
+            return CommandResult.success("✅ Removed discipline: " + name);
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

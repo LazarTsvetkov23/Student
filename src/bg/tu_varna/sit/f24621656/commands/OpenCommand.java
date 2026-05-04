@@ -21,13 +21,13 @@ public class OpenCommand extends BaseCommand {
 
             String filepath = args[1];
 
-            String dir = "";
+            String directory = "";
             if (filepath.contains("/")) {
-                dir = filepath.substring(0, filepath.lastIndexOf("/"));
+                directory = filepath.substring(0, filepath.lastIndexOf("/"));
             } else if (filepath.contains("\\")) {
-                dir = filepath.substring(0, filepath.lastIndexOf("\\"));
+                directory = filepath.substring(0, filepath.lastIndexOf("\\"));
             }
-            XmlFileManager.setCurrentDirectory(dir);
+            XmlFileManager.setCurrentDirectory(directory);
 
             String fileName = filepath;
             if (filepath.contains("/")) {
@@ -91,11 +91,17 @@ public class OpenCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() { return "open <specialties.xml|disciplines.xml|students.xml>"; }
+    public String getUsage() {
+        return "open <specialties.xml|disciplines.xml|students.xml>";
+    }
 
     @Override
-    public String getDescription() { return "Opens an XML file (loads if exists, creates in memory if not)"; }
+    public String getDescription() {
+        return "Opens an XML file (loads if exists, creates in memory if not)";
+    }
 
     @Override
-    public String getName() { return "open"; }
+    public String getName() {
+        return "open";
+    }
 }

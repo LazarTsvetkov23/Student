@@ -17,7 +17,7 @@ public class EnrollInCommand extends BaseCommand {
             }
             requireFileOpen();
 
-            String fn = args[1];
+            String facultyNumber = args[1];
 
             StringBuilder disciplineBuilder = new StringBuilder();
             for (int i = 2; i < args.length; i++) {
@@ -28,22 +28,22 @@ public class EnrollInCommand extends BaseCommand {
             }
             String disciplineName = disciplineBuilder.toString();
 
-            Student student = repository.findStudentByFacultyNumber(fn);
+            Student student = repository.findStudentByFacultyNumber(facultyNumber);
             if (student == null) {
-                return CommandResult.error("Student with FN " + fn + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             Discipline discipline = repository.findDisciplineByName(disciplineName);
             if (discipline == null) {
-                return CommandResult.error("Discipline '" + disciplineName + "' not found");
+                return CommandResult.error("❌ Discipline '" + disciplineName + "' not found");
             }
 
             if (!student.enrollInDiscipline(discipline)) {
-                return CommandResult.error("Cannot enroll in discipline. Check: discipline exists for this course/specialty, student is enrolled");
+                return CommandResult.error("❌ Cannot enroll in discipline. Check: discipline exists for this course/specialty, student is enrolled");
             }
 
             session.setHasUnsavedChanges(true);
-            return CommandResult.success("Student " + fn + " enrolled in " + disciplineName);
+            return CommandResult.success("✅ Student " + facultyNumber + " enrolled in " + disciplineName);
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

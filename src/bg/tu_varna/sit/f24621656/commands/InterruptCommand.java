@@ -19,11 +19,11 @@ public class InterruptCommand extends BaseCommand {
             Student student = repository.findStudentByFacultyNumber(facultyNumber);
 
             if (student == null) {
-                return CommandResult.error("Student with FN " + facultyNumber + " not found");
+                return CommandResult.error("❌ Student with FN " + facultyNumber + " not found");
             }
 
             if (student.getStatus() != StudentStatus.ENROLLED) {
-                return CommandResult.error("Student is not currently enrolled");
+                return CommandResult.error("❌ Student is not currently enrolled");
             }
 
             student.setStatus(StudentStatus.INTERRUPTED);
@@ -39,11 +39,17 @@ public class InterruptCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() { return "interrupt <fn>"; }
+    public String getUsage() {
+        return "interrupt <fn>";
+    }
 
     @Override
-    public String getDescription() { return "Interrupts a student's studies"; }
+    public String getDescription() {
+        return "Interrupts a student's studies";
+    }
 
     @Override
-    public String getName() { return "interrupt"; }
+    public String getName() {
+        return "interrupt";
+    }
 }

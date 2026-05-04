@@ -19,17 +19,17 @@ public class ResumeCommand extends BaseCommand {
             Student student = repository.findStudentByFacultyNumber(facultyNumber);
 
             if (student == null) {
-                return CommandResult.error("Student with FN " + facultyNumber + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             if (student.getStatus() != StudentStatus.INTERRUPTED) {
-                return CommandResult.error("Student is not interrupted");
+                return CommandResult.error("❌ Student is not interrupted");
             }
 
             student.setStatus(StudentStatus.ENROLLED);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success(String.format("▶ Student %s (FN: %s) has been resumed", student.getName(), facultyNumber));
+            return CommandResult.success(String.format("▶ Student %s (faculty number: %s) has been resumed", student.getName(), facultyNumber));
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());

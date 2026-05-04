@@ -18,7 +18,7 @@ public class AddGradeCommand extends BaseCommand {
             }
             requireFileOpen();
 
-            String fn = args[1];
+            String facultyNumber = args[1];
 
             StringBuilder disciplineBuilder = new StringBuilder();
             for (int i = 2; i < args.length - 1; i++) {
@@ -33,32 +33,38 @@ public class AddGradeCommand extends BaseCommand {
             try {
                 gradeValue = Double.parseDouble(args[args.length - 1]);
             } catch (NumberFormatException e) {
-                return CommandResult.error("Grade must be a number");
+                return CommandResult.error("❌ Grade must be a number");
             }
 
             if (gradeValue < 2.00 || gradeValue > 6.00) {
-                return CommandResult.error("Grade must be between 2.00 and 6.00");
+                return CommandResult.error("❌ Grade must be between 2.00 and 6.00");
             }
 
-            Student student = repository.findStudentByFacultyNumber(fn);
+            Student student = repository.findStudentByFacultyNumber(facultyNumber);
             if (student == null) {
-                return CommandResult.error("Student with FN " + fn + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             Discipline discipline = repository.findDisciplineByName(disciplineName);
             if (discipline == null) {
-                return CommandResult.error("Discipline '" + disciplineName + "' not found");
+                return CommandResult.error("❌ Discipline '" + disciplineName + "' not found");
             }
 
             Grade grade = new Grade(discipline, gradeValue);
             if (!student.addGrade(grade)) {
-                return CommandResult.error("Cannot add grade. Student is not enrolled in this discipline or status is not ENROLLED");
+                return CommandResult.error("❌ Cannot add grade. Student is not enrolled in this discipline or status is not ENROLLED");
             }
 
             session.setHasUnsavedChanges(true);
-            String result = gradeValue >= 3.00 ? "PASSED" : "FAILED";
 
-            return CommandResult.success(String.format("Grade %.2f (%s) added for %s in %s", gradeValue, result, fn, disciplineName));
+            String result;
+            if (gradeValue >= 3.00) {
+                result = "✅ PASSED";
+            } else {
+                result = "❌ FAILED";
+            }
+
+            return CommandResult.success(String.format("📝 Grade %.2f (%s) added for %s in %s", gradeValue, result, facultyNumber, disciplineName));
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

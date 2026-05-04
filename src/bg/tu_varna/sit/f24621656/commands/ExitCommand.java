@@ -7,7 +7,7 @@ import bg.tu_varna.sit.f24621656.contracts.Command;
 public class ExitCommand implements Command {
     @Override
     public CommandResult execute(String[] args) {
-        return CommandResult.success("Exiting the program...");
+        return CommandResult.success("👋 Exiting the program...");
     }
 
     @Override

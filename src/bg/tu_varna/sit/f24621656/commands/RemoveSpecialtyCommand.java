@@ -27,26 +27,26 @@ public class RemoveSpecialtyCommand extends BaseCommand {
             String rawName = nameBuilder.toString();
 
             if (!rawName.startsWith("\"") || !rawName.endsWith("\"")) {
-                return CommandResult.error("Specialty name must be enclosed in quotes: \"<name>\"");
+                return CommandResult.error("❌ Specialty name must be enclosed in quotes: \"<name>\"");
             }
 
             String name = rawName.substring(1, rawName.length() - 1);
 
             Specialty specialty = repository.findSpecialtyByName(name);
             if (specialty == null) {
-                return CommandResult.error("Specialty not found: " + name);
+                return CommandResult.error("❌ Specialty not found: " + name);
             }
 
             for (Student student : repository.getAllStudents()) {
                 if (student.getSpecialty().equals(specialty)) {
-                    return CommandResult.error("Cannot remove specialty: There are students enrolled in " + name);
+                    return CommandResult.error("❌ Cannot remove specialty: There are students enrolled in " + name);
                 }
             }
 
             repository.removeSpecialty(specialty);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success("Removed specialty: " + name);
+            return CommandResult.success("✅ Removed specialty: " + name);
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

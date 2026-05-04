@@ -17,62 +17,64 @@ public class ChangeCommand extends BaseCommand {
             }
             requireFileOpen();
 
-            String fn = args[1];
+            String facultyNumber = args[1];
             String option = args[2].toLowerCase();
 
-            Student student = repository.findStudentByFacultyNumber(fn);
+            Student student = repository.findStudentByFacultyNumber(facultyNumber);
             if (student == null) {
-                return CommandResult.error("Student with FN " + fn + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             switch (option) {
                 case "program": {
                     StringBuilder programBuilder = new StringBuilder();
                     for (int i = 3; i < args.length; i++) {
-                        if (i > 3) programBuilder.append(" ");
+                        if (i > 3) {
+                            programBuilder.append(" ");
+                        }
                         programBuilder.append(args[i]);
                     }
                     String newProgram = programBuilder.toString();
 
                     Specialty newSpecialty = repository.findSpecialtyByName(newProgram);
                     if (newSpecialty == null) {
-                        return CommandResult.error("Specialty '" + newProgram + "' does not exist");
+                        return CommandResult.error("❌ Specialty '" + newProgram + "' does not exist");
                     }
 
                     student.setSpecialty(newSpecialty);
                     session.setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed specialty to " + newProgram);
+                    return CommandResult.success("✅ Student " + facultyNumber + " changed specialty to " + newProgram);
                 }
                 case "group": {
                     int newGroup;
                     try {
                         newGroup = Integer.parseInt(args[3]);
                     } catch (NumberFormatException e) {
-                        return CommandResult.error("Group must be a number");
+                        return CommandResult.error("❌ Group must be a number");
                     }
                     student.setGroup(newGroup);
                     session.setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed group to " + newGroup);
+                    return CommandResult.success("✅ Student " + facultyNumber + " changed group to " + newGroup);
                 }
                 case "year": {
                     int newYear;
                     try {
                         newYear = Integer.parseInt(args[3]);
                     } catch (NumberFormatException e) {
-                        return CommandResult.error("Year must be a number");
+                        return CommandResult.error("❌ Year must be a number");
                     }
                     if (newYear != student.getCourse() + 1) {
-                        return CommandResult.error("Can only change to next course (year " + (student.getCourse() + 1) + ")");
+                        return CommandResult.error("❌ Can only change to next course (year " + (student.getCourse() + 1) + ")");
                     }
                     if (!student.canAdvance()) {
-                        return CommandResult.error("Student cannot advance to next course (too many failed mandatory subjects)");
+                        return CommandResult.error("❌ Student cannot advance to next course (too many failed mandatory subjects)");
                     }
                     student.setCourse(newYear);
                     session.setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed year to " + newYear);
+                    return CommandResult.success("✅ Student " + facultyNumber + " changed year to " + newYear);
                 }
                 default:
-                    return CommandResult.error("Invalid option. Use: program, group, or year");
+                    return CommandResult.error("❌ Invalid option. Use: program, group, or year");
             }
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

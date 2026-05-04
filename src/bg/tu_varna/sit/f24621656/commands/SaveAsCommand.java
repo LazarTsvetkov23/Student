@@ -42,11 +42,11 @@ public class SaveAsCommand extends BaseCommand {
             }
 
             // Определяне на текущата директория
-            String dir = "";
+            String directory = "";
             if (currentFilePath.contains("/")) {
-                dir = currentFilePath.substring(0, currentFilePath.lastIndexOf("/"));
+                directory = currentFilePath.substring(0, currentFilePath.lastIndexOf("/"));
             } else if (currentFilePath.contains("\\")) {
-                dir = currentFilePath.substring(0, currentFilePath.lastIndexOf("\\"));
+                directory = currentFilePath.substring(0, currentFilePath.lastIndexOf("\\"));
             }
 
             // Запазване на данните в новия файл
@@ -69,7 +69,13 @@ public class SaveAsCommand extends BaseCommand {
             }
 
             // Актуализиране на текущия път
-            String newPath = dir.isEmpty() ? newFileName : dir + "/" + newFileName;
+            String newPath;
+            if (directory.isEmpty()) {
+                newPath = newFileName;
+            } else {
+                newPath = directory + "/" + newFileName;
+            }
+
             session.setCurrentFilePath(newPath);
             session.setHasUnsavedChanges(false);
 

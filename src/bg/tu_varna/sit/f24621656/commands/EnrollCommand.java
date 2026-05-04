@@ -17,7 +17,7 @@ public class EnrollCommand extends BaseCommand {
             }
             requireFileOpen();
 
-            String fn = args[1];
+            String facultyNumber = args[1];
 
             int groupIndex = -1;
             for (int i = 2; i < args.length; i++) {
@@ -31,7 +31,7 @@ public class EnrollCommand extends BaseCommand {
             }
 
             if (groupIndex == -1) {
-                return CommandResult.error("Cannot find group number");
+                return CommandResult.error("❌ Cannot find group number");
             }
 
             StringBuilder programBuilder = new StringBuilder();
@@ -47,7 +47,7 @@ public class EnrollCommand extends BaseCommand {
             try {
                 group = Integer.parseInt(args[groupIndex]);
             } catch (NumberFormatException e) {
-                return CommandResult.error("Group must be a number");
+                return CommandResult.error("❌ Group must be a number");
             }
 
             StringBuilder nameBuilder = new StringBuilder();
@@ -60,23 +60,23 @@ public class EnrollCommand extends BaseCommand {
             String name = nameBuilder.toString();
 
             if (name.trim().isEmpty()) {
-                return CommandResult.error("Student name cannot be empty");
+                return CommandResult.error("❌ Student name cannot be empty");
             }
 
-            if (repository.findStudentByFacultyNumber(fn) != null) {
-                return CommandResult.error("Student with FN " + fn + " already exists");
+            if (repository.findStudentByFacultyNumber(facultyNumber) != null) {
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " already exists");
             }
 
             Specialty specialty = repository.findSpecialtyByName(programName);
             if (specialty == null) {
-                return CommandResult.error("Specialty '" + programName + "' does not exist");
+                return CommandResult.error("❌ Specialty '" + programName + "' does not exist");
             }
 
-            Student student = new Student(name, fn, 1, specialty, group);
+            Student student = new Student(name, facultyNumber, 1, specialty, group);
             repository.addStudent(student);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success("Enrolled student: " + name + " (FN: " + fn + ") in " + programName);
+            return CommandResult.success("✅ Enrolled student: " + name + " (faculty number: " + facultyNumber + ") in " + programName);
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

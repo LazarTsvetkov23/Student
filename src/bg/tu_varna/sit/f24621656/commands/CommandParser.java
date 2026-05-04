@@ -67,7 +67,7 @@ public class CommandParser {
 
         Command command = commands.get(commandName);
         if (command == null) {
-            return CommandResult.error("Unknown command: '" + commandName + "'. Type 'help' for available commands.");
+            return CommandResult.error("❌ Unknown command: '" + commandName + "'. Type 'help' for available commands.");
         }
 
         return command.execute(parts);

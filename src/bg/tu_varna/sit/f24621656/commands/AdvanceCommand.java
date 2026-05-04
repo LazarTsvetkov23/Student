@@ -18,18 +18,18 @@ public class AdvanceCommand extends BaseCommand {
             Student student = repository.findStudentByFacultyNumber(facultyNumber);
 
             if (student == null) {
-                return CommandResult.error("Student with FN " + facultyNumber + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             if (!student.canAdvance()) {
-                return CommandResult.error("Student cannot advance to next course (too many failed mandatory subjects)");
+                return CommandResult.error("❌ Student cannot advance to next course (too many failed mandatory subjects)");
             }
 
             int oldCourse = student.getCourse();
             student.setCourse(oldCourse + 1);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success(String.format("Student %s advanced from course %d to %d", student.getName(), oldCourse, student.getCourse()));
+            return CommandResult.success(String.format("✅ Student %s advanced from course %d to %d", student.getName(), oldCourse, student.getCourse()));
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());

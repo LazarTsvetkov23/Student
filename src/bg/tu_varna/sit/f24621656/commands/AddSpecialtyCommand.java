@@ -26,35 +26,35 @@ public class AddSpecialtyCommand extends BaseCommand {
             String rawName = nameBuilder.toString();
 
             if (!rawName.startsWith("\"") || !rawName.endsWith("\"")) {
-                return CommandResult.error("Specialty name must be enclosed in quotes: \"<name>\"");
+                return CommandResult.error("❌ Specialty name must be enclosed in quotes: \"<name>\"");
             }
 
             String name = rawName.substring(1, rawName.length() - 1);
 
             if (name.trim().isEmpty()) {
-                return CommandResult.error("Specialty name cannot be empty");
+                return CommandResult.error("❌ Specialty name cannot be empty");
             }
 
             int minCredits;
             try {
                 minCredits = Integer.parseInt(args[args.length - 1]);
             } catch (NumberFormatException e) {
-                return CommandResult.error("Min credits must be a number");
+                return CommandResult.error("❌ Min credits must be a number");
             }
 
             if (minCredits < 0) {
-                return CommandResult.error("Min credits cannot be negative");
+                return CommandResult.error("❌ Min credits cannot be negative");
             }
 
             if (repository.findSpecialtyByName(name) != null) {
-                return CommandResult.error("Specialty already exists: " + name);
+                return CommandResult.error("❌ Specialty already exists: " + name);
             }
 
             Specialty specialty = new Specialty(name, minCredits);
             repository.addSpecialty(specialty);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success("Added specialty: " + name + " (min credits: " + minCredits + ")");
+            return CommandResult.success("✅ Added specialty: " + name + " (min credits: " + minCredits + ")");
 
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());

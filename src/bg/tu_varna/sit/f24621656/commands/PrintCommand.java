@@ -14,11 +14,11 @@ public class PrintCommand extends BaseCommand {
             validateArgs(args, 2);
             requireFileOpen();
 
-            String fn = args[1];
-            Student student = repository.findStudentByFacultyNumber(fn);
+            String facultyNumber = args[1];
+            Student student = repository.findStudentByFacultyNumber(facultyNumber);
 
             if (student == null) {
-                return CommandResult.error("Student with FN " + fn + " not found");
+                return CommandResult.error("❌ Student with FN " + facultyNumber + " not found");
             }
 
             StringBuilder sb = new StringBuilder();

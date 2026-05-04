@@ -18,15 +18,12 @@ public class SaveAllCommand extends BaseCommand {
 
             StringBuilder resultMessage = new StringBuilder();
 
-            // Запазване на specialties.xml
             XmlFileManager.saveSpecialties(repository);
             resultMessage.append("  ✓ specialties.xml\n");
 
-            // Запазване на disciplines.xml
             XmlFileManager.saveDisciplines(repository);
             resultMessage.append("  ✓ disciplines.xml\n");
 
-            // Запазване на students.xml
             XmlFileManager.saveStudents(repository);
             resultMessage.append("  ✓ students.xml\n");
 
@@ -44,11 +41,17 @@ public class SaveAllCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() { return "saveall"; }
+    public String getUsage() {
+        return "saveall";
+    }
 
     @Override
-    public String getDescription() { return "Saves all files (creates them if not exists)"; }
+    public String getDescription() {
+        return "Saves all files (creates them if not exists)";
+    }
 
     @Override
-    public String getName() { return "saveall"; }
+    public String getName() {
+        return "saveall";
+    }
 }

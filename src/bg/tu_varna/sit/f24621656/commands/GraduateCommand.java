@@ -15,21 +15,21 @@ public class GraduateCommand extends BaseCommand {
             validateArgs(args, 2);
             requireFileOpen();
 
-            String fn = args[1];
-            Student student = repository.findStudentByFacultyNumber(fn);
+            String facultyNumber = args[1];
+            Student student = repository.findStudentByFacultyNumber(facultyNumber);
 
             if (student == null) {
-                return CommandResult.error("Student with FN " + fn + " not found");
+                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " not found");
             }
 
             if (!student.canGraduate()) {
-                return CommandResult.error("Student cannot graduate (not all mandatory or enrolled subjects are passed)");
+                return CommandResult.error("❌ Student cannot graduate (not all mandatory or enrolled subjects are passed)");
             }
 
             student.setStatus(StudentStatus.GRADUATED);
             session.setHasUnsavedChanges(true);
 
-            return CommandResult.success(String.format("Student %s (FN: %s) has graduated!", student.getName(), fn));
+            return CommandResult.success(String.format("🎓 Student %s (faculty number: %s) has graduated!", student.getName(), facultyNumber));
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());

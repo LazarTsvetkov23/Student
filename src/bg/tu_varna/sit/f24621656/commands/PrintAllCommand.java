@@ -20,7 +20,9 @@ public class PrintAllCommand extends BaseCommand {
 
             StringBuilder programBuilder = new StringBuilder();
             for (int i = 1; i < args.length - 1; i++) {
-                if (i > 1) programBuilder.append(" ");
+                if (i > 1) {
+                    programBuilder.append(" ");
+                }
                 programBuilder.append(args[i]);
             }
             String programName = programBuilder.toString();
@@ -29,26 +31,33 @@ public class PrintAllCommand extends BaseCommand {
             try {
                 year = Integer.parseInt(args[args.length - 1]);
             } catch (NumberFormatException e) {
-                return CommandResult.error("Year must be a number");
+                return CommandResult.error("❌ Year must be a number");
             }
 
             List<Student> students = repository.getStudentsBySpecialtyAndCourse(programName, year);
 
             if (students.isEmpty()) {
-                return CommandResult.success("No students found in " + programName + ", year " + year);
+                return CommandResult.success("📭 No students found in " + programName + ", year " + year);
             }
 
             StringBuilder sb = new StringBuilder();
-            String shortProgram = programName.length() > 25 ? programName.substring(0, 22) + "..." : programName;
-            sb.append("\n┌─────────────────────────────────────────────────────────────────────────────┐\n");
-            sb.append(String.format("│                   STUDENTS IN %s - YEAR %d                      │\n", shortProgram, year));
-            sb.append("├──────────┬─────────────────────────────────────┬────────┬────────────┬────────┤\n");
-            sb.append("│    FN    │                Name                 │ Group  │   Status   │  Avg   │\n");
-            sb.append("├──────────┼─────────────────────────────────────┼────────┼────────────┼────────┤\n");
 
-            for (Student s : students) {
+            String shortProgram;
+            if (programName.length() > 25) {
+                shortProgram = programName.substring(0, 22) + "...";
+            } else {
+                shortProgram = programName;
+            }
+
+            sb.append("\n┌─────────────────────────────────────────────────────────────────────────────┐\n");
+            sb.append(String.format("│                    👨‍🎓 STUDENTS IN %s - YEAR %d                      │\n", shortProgram, year));
+            sb.append("├────────────────────┬────────────────────────────────┬────────┬────────────┬────────┤\n");
+            sb.append("│    Faculty number  │                Name            │ Group  │   Status   │  Avg   │\n");
+            sb.append("├────────────────────┼────────────────────────────────┼────────┼────────────┼────────┤\n");
+
+            for (Student student : students) {
                 sb.append(String.format("│ %-8s │ %-35s │ %-6d │ %-10s │ %6.2f │\n",
-                        s.getFacultyNumber(), truncate(s.getName(), 35), s.getGroup(), s.getStatus(), s.getAverageGrade()));
+                        student.getFacultyNumber(), truncate(student.getName(), 35), student.getGroup(), student.getStatus(), student.getAverageGrade()));
             }
 
             sb.append("└──────────┴─────────────────────────────────────┴────────┴────────────┴────────┘\n");

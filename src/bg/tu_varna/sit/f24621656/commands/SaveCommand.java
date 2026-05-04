@@ -4,6 +4,9 @@ import bg.tu_varna.sit.f24621656.file.XmlFileManager;
 import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SaveCommand extends BaseCommand {
     private static final String[] VALID_FILES = {"specialties.xml", "disciplines.xml", "students.xml"};
@@ -21,13 +24,13 @@ public class SaveCommand extends BaseCommand {
             String currentFilePath = session.getCurrentFilePath();
 
             String fileName = currentFilePath;
-            String dir = "";
+            String directory = "";
 
             if (currentFilePath.contains("/")) {
-                dir = currentFilePath.substring(0, currentFilePath.lastIndexOf("/"));
+                directory = currentFilePath.substring(0, currentFilePath.lastIndexOf("/"));
                 fileName = currentFilePath.substring(currentFilePath.lastIndexOf("/") + 1);
             } else if (currentFilePath.contains("\\")) {
-                dir = currentFilePath.substring(0, currentFilePath.lastIndexOf("\\"));
+                directory = currentFilePath.substring(0, currentFilePath.lastIndexOf("\\"));
                 fileName = currentFilePath.substring(currentFilePath.lastIndexOf("\\") + 1);
             }
 
@@ -49,8 +52,8 @@ public class SaveCommand extends BaseCommand {
             }
 
             // Създаване на директорията, ако не съществува
-            if (!dir.isEmpty()) {
-                Path dirPath = Paths.get(dir);
+            if (!directory.isEmpty()) {
+                Path dirPath = Paths.get(directory);
                 if (!Files.exists(dirPath)) {
                     Files.createDirectories(dirPath);
                 }
@@ -68,7 +71,13 @@ public class SaveCommand extends BaseCommand {
             session.setHasUnsavedChanges(false);
 
             // Проверка дали файлът е бил нов (не е съществувал преди)
-            String fullPath = dir.isEmpty() ? fileName : dir + "/" + fileName;
+            String fullPath;
+            if (directory.isEmpty()) {
+                fullPath = fileName;
+            } else {
+                fullPath = directory + "/" + fileName;
+            }
+
             boolean fileExistedBefore = Files.exists(Paths.get(fullPath));
 
             if (!fileExistedBefore) {
@@ -87,11 +96,17 @@ public class SaveCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() { return "save"; }
+    public String getUsage() {
+        return "save";
+    }
 
     @Override
-    public String getDescription() { return "Saves the currently open file (creates it if not exists)"; }
+    public String getDescription() {
+        return "Saves the currently open file (creates it if not exists)";
+    }
 
     @Override
-    public String getName() { return "save"; }
+    public String getName() {
+        return "save";
+    }
 }

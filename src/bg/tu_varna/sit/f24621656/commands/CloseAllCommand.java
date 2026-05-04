@@ -14,12 +14,12 @@ public class CloseAllCommand extends BaseCommand {
             requireFileOpen();
 
             if (session.hasUnsavedChanges()) {
-                return CommandResult.error("Cannot close: You have unsaved changes! Use 'save' or 'saveall' first.");
+                return CommandResult.error("⚠️ Cannot close: You have unsaved changes! Use 'save' or 'saveall' first.");
             }
 
             session.closeFile();
 
-            return CommandResult.success("Successfully closed all files");
+            return CommandResult.success("🔒 Successfully closed all files");
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());
