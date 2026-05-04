@@ -16,8 +16,6 @@ public class University implements DataRepository {
         this.disciplines = new ArrayList<>();
     }
 
-    // ==================== Student Operations ====================
-
     @Override
     public void addStudent(Student student) {
         if (!students.contains(student)) {
@@ -54,13 +52,11 @@ public class University implements DataRepository {
     @Override
     public List<Student> getStudentsForProtocol(Discipline discipline) {
         List<Student> result = new ArrayList<>();
-
         for (Student student : students) {
             if (student.getEnrolledDisciplines().contains(discipline)) {
                 result.add(student);
             }
         }
-
         // Bubble sort by faculty number
         for (int i = 0; i < result.size() - 1; i++) {
             for (int j = 0; j < result.size() - i - 1; j++) {
@@ -74,8 +70,6 @@ public class University implements DataRepository {
         return result;
     }
 
-    // ==================== Specialty Operations ====================
-
     @Override
     public void addSpecialty(Specialty specialty) {
         if (!specialties.contains(specialty)) {
@@ -85,7 +79,7 @@ public class University implements DataRepository {
 
     @Override
     public void removeSpecialty(Specialty specialty) {
-            specialties.remove(specialty);
+        specialties.remove(specialty);
     }
 
     @Override
@@ -102,8 +96,6 @@ public class University implements DataRepository {
     public List<Specialty> getAllSpecialties() {
         return new ArrayList<>(specialties);
     }
-
-    // ==================== Discipline Operations ====================
 
     @Override
     public void addDiscipline(Discipline discipline) {
@@ -131,8 +123,6 @@ public class University implements DataRepository {
     public List<Discipline> getAllDisciplines() {
         return new ArrayList<>(disciplines);
     }
-
-    // ==================== Common Operations ====================
 
     @Override
     public void clear() {
