@@ -21,21 +21,10 @@ public class Specialty {
         this.minElectiveCredits = minElectiveCredits;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<Discipline> getDisciplines() {
-        return disciplines;
-    }
-
-    public int getMinElectiveCredits() {
-        return minElectiveCredits;
-    }
-
-    public void setMinElectiveCredits(int minElectiveCredits) {
-        this.minElectiveCredits = minElectiveCredits;
-    }
+    public String getName() { return name; }
+    public List<Discipline> getDisciplines() { return disciplines; }
+    public int getMinElectiveCredits() { return minElectiveCredits; }
+    public void setMinElectiveCredits(int minElectiveCredits) { this.minElectiveCredits = minElectiveCredits; }
 
     public void addDiscipline(Discipline discipline) {
         if (!disciplines.contains(discipline)) {
@@ -61,7 +50,6 @@ public class Specialty {
             return false;
         }
         Specialty that = (Specialty) object;
-
         return Objects.equals(name, that.name);
     }
 
