@@ -15,39 +15,16 @@ public class Session {
         this.hasUnsavedChanges = false;
     }
 
-    public DataRepository getRepository() {
-        return repository;
-    }
-
-    public String getCurrentFilePath() {
-        return currentFilePath;
-    }
-
-    public void setCurrentFilePath(String currentFilePath) {
-        this.currentFilePath = currentFilePath;
-    }
-
-    public boolean isFileOpen() {
-        return isFileOpen;
-    }
-
-    public void setFileOpen(boolean fileOpen) {
-        isFileOpen = fileOpen;
-    }
-
-    public boolean hasUnsavedChanges() {
-        return hasUnsavedChanges;
-    }
-
-    public void setHasUnsavedChanges(boolean hasUnsavedChanges) {
-        this.hasUnsavedChanges = hasUnsavedChanges;
-    }
+    public DataRepository getRepository() { return repository; }
+    public String getCurrentFilePath() { return currentFilePath; }
+    public void setCurrentFilePath(String currentFilePath) { this.currentFilePath = currentFilePath; }
+    public boolean isFileOpen() { return isFileOpen; }
+    public void setFileOpen(boolean fileOpen) { isFileOpen = fileOpen; }
+    public boolean hasUnsavedChanges() { return hasUnsavedChanges; }
+    public void setHasUnsavedChanges(boolean hasUnsavedChanges) { this.hasUnsavedChanges = hasUnsavedChanges; }
 
     public void closeFile() {
-        if (!isFileOpen) {
-            return;
-        }
-
+        if (!isFileOpen) return;
         repository.clear();
         currentFilePath = null;
         isFileOpen = false;
