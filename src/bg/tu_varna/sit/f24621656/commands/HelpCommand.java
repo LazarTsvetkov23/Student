@@ -14,7 +14,7 @@ public class HelpCommand implements Command {
     @Override
     public CommandResult execute(String[] args) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n╔════════════════════════════════════════════════════════════════════════════════════╗\n");
+        sb.append("\n╔═════════════════════════════════════════════════════════════════════════════════════╗\n");
         sb.append("║                                  AVAILABLE COMMANDS                                  ║\n");
         sb.append("╠══════════════════════════════════════════════════════════════════════════════════════╣\n");
         sb.append("║                                                                                      ║\n");
@@ -30,9 +30,9 @@ public class HelpCommand implements Command {
         sb.append("║    exit                                  - Exits the program                         ║\n");
         sb.append("║                                                                                      ║\n");
         sb.append("║    SPECIALTY COMMANDS:                                                               ║\n");
-        sb.append("║    addspecialty \"<name>\" <minCredits>    - Adds a new specialty                    ║\n");
+        sb.append("║    addspecialty \"<name>\" <minCredits>  - Adds a new specialty                      ║\n");
         sb.append("║    listspecialties                       - Lists all specialties                     ║\n");
-        sb.append("║    removespecialty \"<name>\"              - Removes a specialty                     ║\n");
+        sb.append("║    removespecialty \"<name>\"            - Removes a specialty                       ║\n");
         sb.append("║                                                                                      ║\n");
         sb.append("║    DISCIPLINE COMMANDS:                                                              ║\n");
         sb.append("║    adddiscipline <name> <type> <credits> <courses> - Adds a discipline               ║\n");

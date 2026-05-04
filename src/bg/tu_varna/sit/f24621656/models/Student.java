@@ -2,6 +2,7 @@ package bg.tu_varna.sit.f24621656.models;
 
 import bg.tu_varna.sit.f24621656.enums.DisciplineType;
 import bg.tu_varna.sit.f24621656.enums.StudentStatus;
+import bg.tu_varna.sit.f24621656.validators.DisciplineEnrollmentValidator;
 
 import java.util.ArrayList;
 import java.util.List;

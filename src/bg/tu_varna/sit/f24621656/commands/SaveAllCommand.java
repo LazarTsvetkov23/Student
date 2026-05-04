@@ -16,35 +16,39 @@ public class SaveAllCommand extends BaseCommand {
             validateArgs(args, 1);
             requireFileOpen();
 
+            StringBuilder resultMessage = new StringBuilder();
+
+            // Запазване на specialties.xml
             XmlFileManager.saveSpecialties(repository);
+            resultMessage.append("  ✓ specialties.xml\n");
+
+            // Запазване на disciplines.xml
             XmlFileManager.saveDisciplines(repository);
+            resultMessage.append("  ✓ disciplines.xml\n");
+
+            // Запазване на students.xml
             XmlFileManager.saveStudents(repository);
+            resultMessage.append("  ✓ students.xml\n");
 
             session.setHasUnsavedChanges(false);
 
-            return CommandResult.success("Successfully saved all files: specialties.xml, disciplines.xml, students.xml");
+            return CommandResult.success("💾 Saved all files:\n" + resultMessage.toString());
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());
         } catch (IOException e) {
-            return CommandResult.error("Error saving files: " + e.getMessage());
+            return CommandResult.error("❌ Error saving files: " + e.getMessage());
         }
     }
 
     @Override
-    public String getUsage() {
-        return "saveall";
-    }
+    public String getUsage() { return "saveall"; }
 
     @Override
-    public String getDescription() {
-        return "Saves all files: specialties.xml, disciplines.xml, students.xml";
-    }
+    public String getDescription() { return "Saves all files (creates them if not exists)"; }
 
     @Override
-    public String getName() {
-        return "saveall";
-    }
+    public String getName() { return "saveall"; }
 }

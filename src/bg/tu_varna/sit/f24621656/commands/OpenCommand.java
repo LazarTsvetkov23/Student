@@ -46,7 +46,7 @@ public class OpenCommand extends BaseCommand {
 
             if (!isValidFile) {
                 StringBuilder hint = new StringBuilder();
-                hint.append("Invalid file. Available files:\n");
+                hint.append("❌ Invalid file. Available files:\n");
                 for (String validFile : VALID_FILES) {
                     hint.append("  • ").append(validFile).append("\n");
                 }
@@ -56,57 +56,46 @@ public class OpenCommand extends BaseCommand {
             String fullPath = XmlFileManager.getFullPath(fileName);
             boolean fileExists = Files.exists(Paths.get(fullPath));
 
+            // Ако файлът не съществува, НЕ го създаваме, а само го отваряме в паметта
+            if (!fileExists) {
+                // Изчистваме репозиторито за нов празен файл
+                repository.clear();
+                session.setCurrentFilePath(filepath);
+                session.setFileOpen(true);
+                session.setHasUnsavedChanges(false);
+                return CommandResult.success("📂 Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
+            }
+
+            // Ако файлът съществува, зареждаме данните
             if (fileName.equalsIgnoreCase("specialties.xml")) {
-                if (!fileExists) {
-                    XmlFileManager.saveSpecialties(repository);
-                } else {
-                    XmlFileManager.loadSpecialties(repository);
-                }
+                XmlFileManager.loadSpecialties(repository);
             } else if (fileName.equalsIgnoreCase("disciplines.xml")) {
-                if (!fileExists) {
-                    XmlFileManager.saveDisciplines(repository);
-                } else {
-                    XmlFileManager.loadDisciplines(repository);
-                }
+                XmlFileManager.loadDisciplines(repository);
             } else if (fileName.equalsIgnoreCase("students.xml")) {
-                if (!fileExists) {
-                    XmlFileManager.saveStudents(repository);
-                } else {
-                    XmlFileManager.loadStudents(repository);
-                }
+                XmlFileManager.loadStudents(repository);
             }
 
             session.setCurrentFilePath(filepath);
             session.setFileOpen(true);
             session.setHasUnsavedChanges(false);
 
-            if (!fileExists) {
-                return CommandResult.success("Created and opened new file: " + fileName);
-            } else {
-                return CommandResult.success("Successfully opened " + fileName);
-            }
+            return CommandResult.success("📂 Successfully opened " + fileName);
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());
         } catch (IOException e) {
-            return CommandResult.error("Error: " + e.getMessage());
+            return CommandResult.error("❌ Error reading file: " + e.getMessage());
         }
     }
 
     @Override
-    public String getUsage() {
-        return "open <specialties.xml|disciplines.xml|students.xml>";
-    }
+    public String getUsage() { return "open <specialties.xml|disciplines.xml|students.xml>"; }
 
     @Override
-    public String getDescription() {
-        return "Opens an XML file (creates it if not exists)";
-    }
+    public String getDescription() { return "Opens an XML file (loads if exists, creates in memory if not)"; }
 
     @Override
-    public String getName() {
-        return "open";
-    }
+    public String getName() { return "open"; }
 }

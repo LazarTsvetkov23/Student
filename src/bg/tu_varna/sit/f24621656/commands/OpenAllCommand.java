@@ -19,57 +19,60 @@ public class OpenAllCommand extends BaseCommand {
 
             StringBuilder resultMessage = new StringBuilder();
             boolean hasErrors = false;
+            boolean anyFileLoaded = false;
 
             // specialties.xml
             try {
-                boolean exists = XmlFileManager.fileExists("specialties.xml");
-                if (!exists) {
-                    XmlFileManager.saveSpecialties(repository);
-                    resultMessage.append("Created specialties.xml\n");
-                } else {
+                if (XmlFileManager.fileExists("specialties.xml")) {
                     XmlFileManager.loadSpecialties(repository);
-                    resultMessage.append("Loaded specialties.xml\n");
+                    resultMessage.append("  ✓ Loaded specialties.xml\n");
+                    anyFileLoaded = true;
+                } else {
+                    resultMessage.append("  • specialties.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("Error loading specialties.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("  ❌ Error loading specialties.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
             }
 
             // disciplines.xml
             try {
-                boolean exists = XmlFileManager.fileExists("disciplines.xml");
-                if (!exists) {
-                    XmlFileManager.saveDisciplines(repository);
-                    resultMessage.append("Created disciplines.xml\n");
-                } else {
+                if (XmlFileManager.fileExists("disciplines.xml")) {
                     XmlFileManager.loadDisciplines(repository);
-                    resultMessage.append("Loaded disciplines.xml\n");
+                    resultMessage.append("  ✓ Loaded disciplines.xml\n");
+                    anyFileLoaded = true;
+                } else {
+                    resultMessage.append("  • disciplines.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("Error loading disciplines.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("  ❌ Error loading disciplines.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
             }
 
             // students.xml
             try {
-                boolean exists = XmlFileManager.fileExists("students.xml");
-                if (!exists) {
-                    XmlFileManager.saveStudents(repository);
-                    resultMessage.append("Created students.xml\n");
-                } else {
+                if (XmlFileManager.fileExists("students.xml")) {
                     XmlFileManager.loadStudents(repository);
-                    resultMessage.append("Loaded students.xml\n");
+                    resultMessage.append("  ✓ Loaded students.xml\n");
+                    anyFileLoaded = true;
+                } else {
+                    resultMessage.append("  • students.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("Error loading students.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("  ❌ Error loading students.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
+            }
+
+            // Ако няма заредени файлове, изчистваме репозиторито
+            if (!anyFileLoaded) {
+                repository.clear();
             }
 
             session.setCurrentFilePath("all_files");
             session.setFileOpen(true);
             session.setHasUnsavedChanges(false);
 
-            String finalMessage = "Opened all files:\n" + resultMessage.toString();
+            String finalMessage = "📂 Opened files:\n" + resultMessage.toString();
 
             if (hasErrors) {
                 return CommandResult.error(finalMessage);
@@ -83,17 +86,11 @@ public class OpenAllCommand extends BaseCommand {
     }
 
     @Override
-    public String getUsage() {
-        return "openall";
-    }
+    public String getUsage() { return "openall"; }
 
     @Override
-    public String getDescription() {
-        return "Opens all files: specialties.xml, disciplines.xml, students.xml";
-    }
+    public String getDescription() { return "Opens all files (loads existing ones, creates none)"; }
 
     @Override
-    public String getName() {
-        return "openall";
-    }
+    public String getName() { return "openall"; }
 }
