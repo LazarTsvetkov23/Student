@@ -23,7 +23,9 @@ public class HelpCommand implements Command {
         sb.append("║    openall                               - Opens all XML files                       ║\n");
         sb.append("║    save                                  - Saves the currently open file             ║\n");
         sb.append("║    saveall                               - Saves all XML files                       ║\n");
+        sb.append("║    saveas <file>                         - Saves the current file with a new name    ║\n");
         sb.append("║    close                                 - Closes the currently open file            ║\n");
+        sb.append("║    closeall                              - Closes all open files                     ║\n");
         sb.append("║    help                                  - Shows this help message                   ║\n");
         sb.append("║    exit                                  - Exits the program                         ║\n");
         sb.append("║                                                                                      ║\n");
