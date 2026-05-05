@@ -8,8 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class OpenCommand extends BaseCommand {
-    private static final String[] VALID_FILES = {"specialties.xml", "disciplines.xml", "students.xml"};
-
     public OpenCommand(Session session) {
         super(session);
     }
@@ -17,48 +15,33 @@ public class OpenCommand extends BaseCommand {
     @Override
     public CommandResult execute(String[] args) {
         try {
-            validateArgs(args, 2);
+            if (args.length < 2) {
+                return CommandResult.error("❌ Usage: open <filename.xml>");
+            }
 
             String filepath = args[1];
 
+            if (!filepath.toLowerCase().endsWith(".xml")) {
+                return CommandResult.error("❌ Only .xml files are allowed. Please use a file with .xml extension.");
+            }
+
             String directory = "";
+            String fileName = filepath;
+
             if (filepath.contains("/")) {
                 directory = filepath.substring(0, filepath.lastIndexOf("/"));
-            } else if (filepath.contains("\\")) {
-                directory = filepath.substring(0, filepath.lastIndexOf("\\"));
-            }
-            XmlFileManager.setCurrentDirectory(directory);
-
-            String fileName = filepath;
-            if (filepath.contains("/")) {
                 fileName = filepath.substring(filepath.lastIndexOf("/") + 1);
             } else if (filepath.contains("\\")) {
+                directory = filepath.substring(0, filepath.lastIndexOf("\\"));
                 fileName = filepath.substring(filepath.lastIndexOf("\\") + 1);
             }
 
-            boolean isValidFile = false;
-            for (String validFile : VALID_FILES) {
-                if (fileName.equalsIgnoreCase(validFile)) {
-                    isValidFile = true;
-                    break;
-                }
-            }
-
-            if (!isValidFile) {
-                StringBuilder hint = new StringBuilder();
-                hint.append("❌ Invalid file. Available files:\n");
-                for (String validFile : VALID_FILES) {
-                    hint.append("  • ").append(validFile).append("\n");
-                }
-                return CommandResult.error(hint.toString());
-            }
+            XmlFileManager.setCurrentDirectory(directory);
 
             String fullPath = XmlFileManager.getFullPath(fileName);
             boolean fileExists = Files.exists(Paths.get(fullPath));
 
-            // Ако файлът не съществува, НЕ го създаваме, а само го отваряме в паметта
             if (!fileExists) {
-                // Изчистваме репозиторито за нов празен файл
                 repository.clear();
                 session.setCurrentFilePath(filepath);
                 session.setFileOpen(true);
@@ -66,13 +49,14 @@ public class OpenCommand extends BaseCommand {
                 return CommandResult.success("📂 Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
             }
 
-            // Ако файлът съществува, зареждаме данните
             if (fileName.equalsIgnoreCase("specialties.xml")) {
                 XmlFileManager.loadSpecialties(repository);
             } else if (fileName.equalsIgnoreCase("disciplines.xml")) {
                 XmlFileManager.loadDisciplines(repository);
             } else if (fileName.equalsIgnoreCase("students.xml")) {
                 XmlFileManager.loadStudents(repository);
+            } else {
+                repository.clear();
             }
 
             session.setCurrentFilePath(filepath);
@@ -82,9 +66,9 @@ public class OpenCommand extends BaseCommand {
             return CommandResult.success("📂 Successfully opened " + fileName);
 
         } catch (IllegalArgumentException e) {
-            return CommandResult.error(e.getMessage());
+            return CommandResult.error("❌ " + e.getMessage());
         } catch (IllegalStateException e) {
-            return CommandResult.error(e.getMessage());
+            return CommandResult.error("❌ " + e.getMessage());
         } catch (IOException e) {
             return CommandResult.error("❌ Error reading file: " + e.getMessage());
         }
@@ -92,7 +76,7 @@ public class OpenCommand extends BaseCommand {
 
     @Override
     public String getUsage() {
-        return "open <specialties.xml|disciplines.xml|students.xml>";
+        return "open <filename.xml>";
     }
 
     @Override
