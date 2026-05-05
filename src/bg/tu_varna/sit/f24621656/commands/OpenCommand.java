@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+//WORKED
+
 public class OpenCommand extends BaseCommand {
     public OpenCommand(Session session) {
         super(session);
