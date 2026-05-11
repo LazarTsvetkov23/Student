@@ -14,7 +14,7 @@ public class AddSpecialtyCommand extends BaseCommand {
     public CommandResult execute(String[] args) {
         try {
             if (args.length < 3) {
-                return CommandResult.error("❌ Usage: addspecialty \"<name>\" <minCredits>");
+                return CommandResult.error("Usage: addspecialty \"<name>\" <minCredits>");
             }
 
             requireFileOpen();
