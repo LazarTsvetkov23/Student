@@ -5,6 +5,8 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.io.IOException;
 
+//WORKED
+
 public class OpenAllCommand extends BaseCommand {
     public OpenAllCommand(Session session) {
         super(session);
@@ -21,7 +23,6 @@ public class OpenAllCommand extends BaseCommand {
             boolean hasErrors = false;
             boolean anyFileLoaded = false;
 
-            // specialties.xml
             try {
                 if (XmlFileManager.fileExists("specialties.xml")) {
                     XmlFileManager.loadSpecialties(repository);
@@ -31,11 +32,10 @@ public class OpenAllCommand extends BaseCommand {
                     resultMessage.append("  • specialties.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("  ❌ Error loading specialties.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("Error loading specialties.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
             }
 
-            // disciplines.xml
             try {
                 if (XmlFileManager.fileExists("disciplines.xml")) {
                     XmlFileManager.loadDisciplines(repository);
@@ -45,11 +45,10 @@ public class OpenAllCommand extends BaseCommand {
                     resultMessage.append("  • disciplines.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("  ❌ Error loading disciplines.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("Error loading disciplines.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
             }
 
-            // students.xml
             try {
                 if (XmlFileManager.fileExists("students.xml")) {
                     XmlFileManager.loadStudents(repository);
@@ -59,11 +58,10 @@ public class OpenAllCommand extends BaseCommand {
                     resultMessage.append("  • students.xml (not created yet)\n");
                 }
             } catch (IOException e) {
-                resultMessage.append("  ❌ Error loading students.xml: ").append(e.getMessage()).append("\n");
+                resultMessage.append("Error loading students.xml: ").append(e.getMessage()).append("\n");
                 hasErrors = true;
             }
 
-            // Ако няма заредени файлове, изчистваме репозиторито
             if (!anyFileLoaded) {
                 repository.clear();
             }
@@ -72,7 +70,7 @@ public class OpenAllCommand extends BaseCommand {
             session.setFileOpen(true);
             session.setHasUnsavedChanges(false);
 
-            String finalMessage = "📂 Opened files:\n" + resultMessage.toString();
+            String finalMessage = "Opened files:\n" + resultMessage.toString();
 
             if (hasErrors) {
                 return CommandResult.error(finalMessage);
