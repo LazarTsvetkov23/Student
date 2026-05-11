@@ -24,9 +24,9 @@ public class University implements DataRepository {
     }
 
     @Override
-    public Student findStudentByFacultyNumber(String facultyNumber) {
+    public Student findStudentByFacultyNumber(String fn) {
         for (Student student : students) {
-            if (student.getFacultyNumber().equals(facultyNumber)) {
+            if (student.getFacultyNumber().equals(fn)) {
                 return student;
             }
         }
@@ -57,7 +57,6 @@ public class University implements DataRepository {
                 result.add(student);
             }
         }
-        // Bubble sort by faculty number
         for (int i = 0; i < result.size() - 1; i++) {
             for (int j = 0; j < result.size() - i - 1; j++) {
                 if (result.get(j).getFacultyNumber().compareTo(result.get(j + 1).getFacultyNumber()) > 0) {
