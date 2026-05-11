@@ -6,6 +6,7 @@ import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import bg.tu_varna.sit.f24621656.models.University;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -17,12 +18,12 @@ public class Application {
     CommandParser parser = new CommandParser(session);
     Scanner scanner = new Scanner(System.in);
 
-    System.out.println("╔════════════════════════════════════════════════════════════════════════╗");
-    System.out.println("║                    STUDENT INFORMATION SYSTEM                         ║");
-    System.out.println("╚════════════════════════════════════════════════════════════════════════╝");
+    System.out.println("--------------------------------------------------------------------------");
+    System.out.println("                    STUDENT INFORMATION SYSTEM                            ");
+    System.out.println("--------------------------------------------------------------------------");
     System.out.println();
 
-    System.out.println("📁 Data will be stored in the following files:");
+    System.out.println("Data will be stored in the following files:");
 
     if (Files.exists(Paths.get("specialties.xml"))) {
       System.out.println("  ✓ specialties.xml");
@@ -43,8 +44,35 @@ public class Application {
     }
 
     System.out.println();
-    System.out.println("💡 Type 'help' for available commands");
-    System.out.println("📂 Use 'open <file>' to load/save data");
+    System.out.println("Other XML files in directory:");
+
+    try {
+      File dir = new File(".");
+      java.io.File[] files = dir.listFiles((d, name) -> name.toLowerCase().endsWith(".xml"));
+      boolean hasOtherFiles = false;
+
+      if (files != null) {
+        for (java.io.File file : files) {
+          String name = file.getName();
+          if (!name.equals("specialties.xml") &&
+                  !name.equals("disciplines.xml") &&
+                  !name.equals("students.xml")) {
+            System.out.println("  ✓ " + name);
+            hasOtherFiles = true;
+          }
+        }
+      }
+
+      if (!hasOtherFiles) {
+        System.out.println("  (no other XML files found)");
+      }
+    } catch (Exception e) {
+      System.out.println("  (error reading directory)");
+    }
+
+    System.out.println();
+    System.out.println("Type 'help' for available commands");
+    System.out.println("Use 'open <file>' to load/save data");
     System.out.println();
 
     while (true) {
