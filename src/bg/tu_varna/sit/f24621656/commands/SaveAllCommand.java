@@ -5,6 +5,8 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.io.IOException;
 
+//WORKED
+
 public class SaveAllCommand extends BaseCommand {
     public SaveAllCommand(Session session) {
         super(session);
@@ -13,30 +15,25 @@ public class SaveAllCommand extends BaseCommand {
     @Override
     public CommandResult execute(String[] args) {
         try {
-            validateArgs(args, 1);
+            if (args.length > 1) {
+                return CommandResult.error("Usage: saveall (no arguments)");
+            }
             requireFileOpen();
 
-            StringBuilder resultMessage = new StringBuilder();
-
             XmlFileManager.saveSpecialties(repository);
-            resultMessage.append("  ✓ specialties.xml\n");
-
             XmlFileManager.saveDisciplines(repository);
-            resultMessage.append("  ✓ disciplines.xml\n");
-
             XmlFileManager.saveStudents(repository);
-            resultMessage.append("  ✓ students.xml\n");
 
             session.setHasUnsavedChanges(false);
 
-            return CommandResult.success("💾 Saved all files:\n" + resultMessage.toString());
+            return CommandResult.success("Saved all files:\n  ✓ specialties.xml\n  ✓ disciplines.xml\n  ✓ students.xml");
 
         } catch (IllegalArgumentException e) {
             return CommandResult.error(e.getMessage());
         } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());
         } catch (IOException e) {
-            return CommandResult.error("❌ Error saving files: " + e.getMessage());
+            return CommandResult.error("Error saving files: " + e.getMessage());
         }
     }
 
@@ -47,7 +44,7 @@ public class SaveAllCommand extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Saves all files (creates them if not exists)";
+        return "Saves all files: specialties.xml, disciplines.xml, students.xml";
     }
 
     @Override
