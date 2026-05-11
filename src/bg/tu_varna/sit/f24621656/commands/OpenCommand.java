@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.f24621656.commands.file;
+package bg.tu_varna.sit.f24621656.commands;
 
 import bg.tu_varna.sit.f24621656.commands.base.BaseCommand;
 import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
@@ -8,8 +8,6 @@ import bg.tu_varna.sit.f24621656.session.Session;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-//WORKED
 
 public class OpenCommand extends BaseCommand {
     public OpenCommand(Session session) {
@@ -46,7 +44,6 @@ public class OpenCommand extends BaseCommand {
             }
 
             XmlFileManager.setCurrentDirectory(dir);
-
             String fullPath = XmlFileManager.getFullPath(fileName);
             boolean fileExists = Files.exists(Paths.get(fullPath));
 
@@ -58,16 +55,7 @@ public class OpenCommand extends BaseCommand {
                 return CommandResult.success("Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
             }
 
-            if (fileName.equalsIgnoreCase("specialties.xml")) {
-                XmlFileManager.loadSpecialties(repository);
-            } else if (fileName.equalsIgnoreCase("disciplines.xml")) {
-                XmlFileManager.loadDisciplines(repository);
-            } else if (fileName.equalsIgnoreCase("students.xml")) {
-                XmlFileManager.loadStudents(repository);
-            } else {
-                repository.clear();
-            }
-
+            XmlFileManager.loadAllData(repository, fullPath);
             session.setCurrentFilePath(filepath);
             session.setFileOpen(true);
             session.setHasUnsavedChanges(false);
@@ -75,8 +63,6 @@ public class OpenCommand extends BaseCommand {
             return CommandResult.success("Successfully opened " + fileName);
 
         } catch (IllegalArgumentException e) {
-            return CommandResult.error(e.getMessage());
-        } catch (IllegalStateException e) {
             return CommandResult.error(e.getMessage());
         } catch (IOException e) {
             return CommandResult.error("Error reading file: " + e.getMessage());
