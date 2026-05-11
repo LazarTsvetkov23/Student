@@ -18,27 +18,36 @@ public class OpenCommand extends BaseCommand {
     public CommandResult execute(String[] args) {
         try {
             if (args.length < 2) {
-                return CommandResult.error("❌ Usage: open <filename.xml>");
+                return CommandResult.error("Usage: open <filename.xml>");
             }
 
             String filepath = args[1];
 
             if (!filepath.toLowerCase().endsWith(".xml")) {
-                return CommandResult.error("❌ Only .xml files are allowed. Please use a file with .xml extension.");
+                return CommandResult.error("Only .xml files are allowed. Please use a file with .xml extension.");
             }
 
-            String directory = "";
+            if (session.isFileOpen() && session.hasUnsavedChanges()) {
+                String currentFile = getFileName(session.getCurrentFilePath());
+                return CommandResult.error("Cannot open new file. You have unsaved changes in '" + currentFile + "'. Use 'save' first.");
+            }
+
+            if (session.isFileOpen()) {
+                session.closeFile();
+            }
+
+            String dir = "";
             String fileName = filepath;
 
             if (filepath.contains("/")) {
-                directory = filepath.substring(0, filepath.lastIndexOf("/"));
+                dir = filepath.substring(0, filepath.lastIndexOf("/"));
                 fileName = filepath.substring(filepath.lastIndexOf("/") + 1);
             } else if (filepath.contains("\\")) {
-                directory = filepath.substring(0, filepath.lastIndexOf("\\"));
+                dir = filepath.substring(0, filepath.lastIndexOf("\\"));
                 fileName = filepath.substring(filepath.lastIndexOf("\\") + 1);
             }
 
-            XmlFileManager.setCurrentDirectory(directory);
+            XmlFileManager.setCurrentDirectory(dir);
 
             String fullPath = XmlFileManager.getFullPath(fileName);
             boolean fileExists = Files.exists(Paths.get(fullPath));
@@ -48,7 +57,7 @@ public class OpenCommand extends BaseCommand {
                 session.setCurrentFilePath(filepath);
                 session.setFileOpen(true);
                 session.setHasUnsavedChanges(false);
-                return CommandResult.success("📂 Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
+                return CommandResult.success("Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
             }
 
             if (fileName.equalsIgnoreCase("specialties.xml")) {
@@ -65,15 +74,26 @@ public class OpenCommand extends BaseCommand {
             session.setFileOpen(true);
             session.setHasUnsavedChanges(false);
 
-            return CommandResult.success("📂 Successfully opened " + fileName);
+            return CommandResult.success("Successfully opened " + fileName);
 
         } catch (IllegalArgumentException e) {
-            return CommandResult.error("❌ " + e.getMessage());
+            return CommandResult.error(e.getMessage());
         } catch (IllegalStateException e) {
-            return CommandResult.error("❌ " + e.getMessage());
+            return CommandResult.error(e.getMessage());
         } catch (IOException e) {
-            return CommandResult.error("❌ Error reading file: " + e.getMessage());
+            return CommandResult.error("Error reading file: " + e.getMessage());
         }
+    }
+
+    private String getFileName(String filepath) {
+        String fileName = filepath;
+
+        if (fileName.contains("/")) {
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+        } else if (fileName.contains("\\")) {
+            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+        }
+        return fileName;
     }
 
     @Override
@@ -83,7 +103,7 @@ public class OpenCommand extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Opens an XML file (loads if exists, creates in memory if not)";
+        return "Opens an XML file (closes current if open and saved)";
     }
 
     @Override
