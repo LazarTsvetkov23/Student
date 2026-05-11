@@ -1,5 +1,7 @@
 package bg.tu_varna.sit.f24621656.commands;
 
+import bg.tu_varna.sit.f24621656.commands.base.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
 import bg.tu_varna.sit.f24621656.session.Session;
 
 public class CloseCommand extends BaseCommand {
@@ -10,31 +12,37 @@ public class CloseCommand extends BaseCommand {
     @Override
     public CommandResult execute(String[] args) {
         try {
-            validateArgs(args, 1);
-            requireFileOpen();
+            if (args.length > 1) {
+                return CommandResult.error("Usage: close (no arguments)");
+            }
 
-            String fileName = session.getCurrentFilePath();
+            if (!session.isFileOpen()) {
+                return CommandResult.error("No file is open. Use 'open' first.");
+            }
 
             if (session.hasUnsavedChanges()) {
-                return CommandResult.error("⚠️ Cannot close: You have unsaved changes! Use 'save' first.");
+                return CommandResult.error("Cannot close: You have unsaved changes! Use 'save' first.");
             }
 
+            String fileName = getFileName(session.getCurrentFilePath());
             session.closeFile();
 
-            String shortName = fileName;
-            if (shortName.contains("/")) {
-                shortName = shortName.substring(shortName.lastIndexOf("/") + 1);
-            } else if (shortName.contains("\\")) {
-                shortName = shortName.substring(shortName.lastIndexOf("\\") + 1);
-            }
+            return CommandResult.success("Successfully closed " + fileName);
 
-            return CommandResult.success("🔒 Successfully closed " + shortName);
-
-        } catch (IllegalArgumentException e) {
-            return CommandResult.error(e.getMessage());
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return CommandResult.error(e.getMessage());
         }
+    }
+
+    private String getFileName(String filepath) {
+        String fileName = filepath;
+
+        if (fileName.contains("/")) {
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+        } else if (fileName.contains("\\")) {
+            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+        }
+        return fileName;
     }
 
     @Override

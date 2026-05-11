@@ -37,6 +37,7 @@ public class SaveCommand extends BaseCommand {
 
     private String getFileName(String filepath) {
         String fileName = filepath;
+
         if (fileName.contains("/")) {
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
         } else if (fileName.contains("\\")) {
