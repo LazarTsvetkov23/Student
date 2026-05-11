@@ -1,5 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.file;
 
+import bg.tu_varna.sit.f24621656.commands.base.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
 import bg.tu_varna.sit.f24621656.file.XmlFileManager;
 import bg.tu_varna.sit.f24621656.session.Session;
 
@@ -27,13 +29,9 @@ public class OpenCommand extends BaseCommand {
                 return CommandResult.error("Only .xml files are allowed. Please use a file with .xml extension.");
             }
 
-            if (session.isFileOpen() && session.hasUnsavedChanges()) {
-                String currentFile = getFileName(session.getCurrentFilePath());
-                return CommandResult.error("Cannot open new file. You have unsaved changes in '" + currentFile + "'. Use 'save' first.");
-            }
-
             if (session.isFileOpen()) {
-                session.closeFile();
+                String currentFile = getFileName(session.getCurrentFilePath());
+                return CommandResult.error("Cannot open new file. Close the current file '" + currentFile + "' first.");
             }
 
             String dir = "";
@@ -87,7 +85,6 @@ public class OpenCommand extends BaseCommand {
 
     private String getFileName(String filepath) {
         String fileName = filepath;
-
         if (fileName.contains("/")) {
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
         } else if (fileName.contains("\\")) {
@@ -103,7 +100,7 @@ public class OpenCommand extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Opens an XML file (closes current if open and saved)";
+        return "Opens an XML file";
     }
 
     @Override
