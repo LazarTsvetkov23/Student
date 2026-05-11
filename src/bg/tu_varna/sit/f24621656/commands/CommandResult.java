@@ -1,5 +1,7 @@
 package bg.tu_varna.sit.f24621656.commands;
 
+//WORKED
+
 public class CommandResult {
     private final boolean success;
     private final String message;
