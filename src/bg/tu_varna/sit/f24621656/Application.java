@@ -1,7 +1,7 @@
 package bg.tu_varna.sit.f24621656;
 
-import bg.tu_varna.sit.f24621656.commands.base.CommandParser;
-import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
+import bg.tu_varna.sit.f24621656.commands.CommandParser;
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import bg.tu_varna.sit.f24621656.models.University;
 import bg.tu_varna.sit.f24621656.session.Session;
