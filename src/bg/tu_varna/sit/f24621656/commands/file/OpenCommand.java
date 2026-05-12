@@ -1,7 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.file;
 
-import bg.tu_varna.sit.f24621656.commands.base.BaseCommand;
-import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
+import bg.tu_varna.sit.f24621656.commands.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.file.XmlFileManager;
 import bg.tu_varna.sit.f24621656.session.Session;
 
@@ -27,8 +27,8 @@ public class OpenCommand extends BaseCommand {
                 return CommandResult.error("Only .xml files are allowed. Please use a file with .xml extension.");
             }
 
-            if (session.isFileOpen()) {
-                String currentFile = getFileName(session.getCurrentFilePath());
+            if (getSession().isFileOpen()) {
+                String currentFile = getFileName(getSession().getCurrentFilePath());
                 return CommandResult.error("Cannot open new file. Close the current file '" + currentFile + "' first.");
             }
 
@@ -48,17 +48,17 @@ public class OpenCommand extends BaseCommand {
             boolean fileExists = Files.exists(Paths.get(fullPath));
 
             if (!fileExists) {
-                repository.clear();
-                session.setCurrentFilePath(filepath);
-                session.setFileOpen(true);
-                session.setHasUnsavedChanges(false);
+                getRepository().clear();
+                getSession().setCurrentFilePath(filepath);
+                getSession().setFileOpen(true);
+                getSession().setHasUnsavedChanges(false);
                 return CommandResult.success("Opened new (unsaved) file: " + fileName + " (use 'save' to create it on disk)");
             }
 
-            XmlFileManager.loadAllData(repository, fullPath);
-            session.setCurrentFilePath(filepath);
-            session.setFileOpen(true);
-            session.setHasUnsavedChanges(false);
+            XmlFileManager.loadAllData(getRepository(), fullPath);
+            getSession().setCurrentFilePath(filepath);
+            getSession().setFileOpen(true);
+            getSession().setHasUnsavedChanges(false);
 
             return CommandResult.success("Successfully opened " + fileName);
 
@@ -67,17 +67,6 @@ public class OpenCommand extends BaseCommand {
         } catch (IOException e) {
             return CommandResult.error("Error reading file: " + e.getMessage());
         }
-    }
-
-    private String getFileName(String filepath) {
-        String fileName = filepath;
-
-        if (fileName.contains("/")) {
-            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-        } else if (fileName.contains("\\")) {
-            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
-        }
-        return fileName;
     }
 
     @Override

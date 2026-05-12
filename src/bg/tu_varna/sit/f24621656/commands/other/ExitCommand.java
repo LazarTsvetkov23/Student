@@ -1,8 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.other;
 
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.contracts.Command;
-
-//WORKED
 
 public class ExitCommand implements Command {
     @Override

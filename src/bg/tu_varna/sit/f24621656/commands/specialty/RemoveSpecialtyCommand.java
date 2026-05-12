@@ -1,5 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.specialty;
 
+import bg.tu_varna.sit.f24621656.commands.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
@@ -15,7 +17,10 @@ public class RemoveSpecialtyCommand extends BaseCommand {
             if (args.length < 2) {
                 return CommandResult.error("Usage: removespecialty \"<name>\"");
             }
-            requireFileOpen();
+
+            if (!getSession().isFileOpen()) {
+                return CommandResult.error("No file is open. Use 'open' first.");
+            }
 
             StringBuilder nameBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++) {
@@ -27,28 +32,27 @@ public class RemoveSpecialtyCommand extends BaseCommand {
             String rawName = nameBuilder.toString();
 
             if (!rawName.startsWith("\"") || !rawName.endsWith("\"")) {
-                return CommandResult.error("❌ Specialty name must be enclosed in quotes: \"<name>\"");
+                return CommandResult.error("Specialty name must be enclosed in quotes: \"<name>\"");
             }
 
             String name = rawName.substring(1, rawName.length() - 1);
 
-            Specialty specialty = repository.findSpecialtyByName(name);
+            Specialty specialty = getRepository().findSpecialtyByName(name);
             if (specialty == null) {
-                return CommandResult.error("❌ Specialty not found: " + name);
+                return CommandResult.error("Specialty not found: " + name);
             }
 
-            for (Student student : repository.getAllStudents()) {
+            for (Student student : getRepository().getAllStudents()) {
                 if (student.getSpecialty().equals(specialty)) {
-                    return CommandResult.error("❌ Cannot remove specialty: There are students enrolled in " + name);
+                    return CommandResult.error("Cannot remove specialty: There are students enrolled in " + name);
                 }
             }
 
-            repository.removeSpecialty(specialty);
-            session.setHasUnsavedChanges(true);
+            getRepository().removeSpecialty(specialty);
+            getSession().setHasUnsavedChanges(true);
+            return CommandResult.success("Removed specialty: " + name);
 
-            return CommandResult.success("✅ Removed specialty: " + name);
-
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return CommandResult.error(e.getMessage());
         }
     }
@@ -60,7 +64,7 @@ public class RemoveSpecialtyCommand extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Removes a specialty (if no students enrolled)";
+        return "Removes a specialty";
     }
 
     @Override

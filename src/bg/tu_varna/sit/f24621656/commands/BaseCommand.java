@@ -5,43 +5,31 @@ import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import bg.tu_varna.sit.f24621656.session.Session;
 
 public abstract class BaseCommand implements Command {
-    protected final Session session;
-    protected final DataRepository repository;
+    private final Session session;
+    private final DataRepository repository;
 
     public BaseCommand(Session session) {
-        if (session == null) {
-            throw new IllegalArgumentException("Session cannot be null");
-        }
         this.session = session;
         this.repository = session.getRepository();
     }
 
-    protected void validateArgs(String[] args, int minCount, int maxCount) throws IllegalArgumentException {
-        if (args.length < minCount) {
-            throw new IllegalArgumentException("Missing arguments. Usage: " + getUsage());
+    protected String getFileName(String filepath) {
+        String fileName = filepath;
+
+        if (fileName.contains("/")) {
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+        } else if (fileName.contains("\\")) {
+            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
         }
-        if (maxCount > 0 && args.length > maxCount) {
-            throw new IllegalArgumentException("Too many arguments. Usage: " + getUsage());
-        }
+
+        return fileName;
     }
 
-    protected void validateArgs(String[] args, int exactCount) throws IllegalArgumentException {
-        validateArgs(args, exactCount, exactCount);
+    public Session getSession() {
+        return session;
     }
 
-    protected void requireFileOpen() throws IllegalStateException {
-        if (!session.isFileOpen()) {
-            throw new IllegalStateException("No file is open. Use 'open' first.");
-        }
-    }
-
-    protected String truncate(String text, int maxLength) {
-        if (text == null) {
-            return "";
-        }
-        if (text.length() <= maxLength) {
-            return text;
-        }
-        return text.substring(0, maxLength - 3) + "...";
+    public DataRepository getRepository() {
+        return repository;
     }
 }

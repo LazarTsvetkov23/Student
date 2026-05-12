@@ -1,7 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.file;
 
-import bg.tu_varna.sit.f24621656.commands.base.BaseCommand;
-import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
+import bg.tu_varna.sit.f24621656.commands.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.file.XmlFileManager;
 import bg.tu_varna.sit.f24621656.session.Session;
 
@@ -19,31 +19,20 @@ public class SaveCommand extends BaseCommand {
                 return CommandResult.error("Usage: save (no arguments)");
             }
 
-            if (!session.isFileOpen()) {
+            if (!getSession().isFileOpen()) {
                 return CommandResult.error("No file is open. Use 'open' first.");
             }
 
-            String currentFilePath = session.getCurrentFilePath();
+            String currentFilePath = getSession().getCurrentFilePath();
 
-            XmlFileManager.saveAllData(repository, currentFilePath);
+            XmlFileManager.saveAllData(getRepository(), currentFilePath);
 
-            session.setHasUnsavedChanges(false);
+            getSession().setHasUnsavedChanges(false);
             return CommandResult.success("Successfully saved " + getFileName(currentFilePath));
 
         } catch (IOException e) {
             return CommandResult.error("Error saving file: " + e.getMessage());
         }
-    }
-
-    private String getFileName(String filepath) {
-        String fileName = filepath;
-
-        if (fileName.contains("/")) {
-            fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-        } else if (fileName.contains("\\")) {
-            fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
-        }
-        return fileName;
     }
 
     @Override

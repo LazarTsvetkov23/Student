@@ -1,5 +1,7 @@
-package bg.tu_varna.sit.f24621656.commands;
+package bg.tu_varna.sit.f24621656.commands.student;
 
+import bg.tu_varna.sit.f24621656.commands.BaseCommand;
+import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
@@ -13,25 +15,28 @@ public class EnrollCommand extends BaseCommand {
     public CommandResult execute(String[] args) {
         try {
             if (args.length < 5) {
-                return CommandResult.error("Usage: enroll <fn> <program> <group> <name>");
+                return CommandResult.error("Usage: enroll <fn> \"<program>\" <group> \"<name>\"");
             }
-            requireFileOpen();
 
-            String facultyNumber = args[1];
+            if (!getSession().isFileOpen()) {
+                return CommandResult.error("No file is open. Use 'open' first.");
+            }
+
+            String fn = args[1];
 
             int groupIndex = -1;
-            for (int i = 2; i < args.length; i++) {
+            for (int i = args.length - 1; i >= 2; i--) {
                 try {
                     Integer.parseInt(args[i]);
                     groupIndex = i;
                     break;
                 } catch (NumberFormatException e) {
-                    // continue
+                    continue;
                 }
             }
 
-            if (groupIndex == -1) {
-                return CommandResult.error("❌ Cannot find group number");
+            if (groupIndex == -1 || groupIndex == args.length - 1) {
+                return CommandResult.error("Cannot find group number or student name is missing");
             }
 
             StringBuilder programBuilder = new StringBuilder();
@@ -43,11 +48,15 @@ public class EnrollCommand extends BaseCommand {
             }
             String programName = programBuilder.toString();
 
+            if (programName.startsWith("\"") && programName.endsWith("\"")) {
+                programName = programName.substring(1, programName.length() - 1);
+            }
+
             int group;
             try {
                 group = Integer.parseInt(args[groupIndex]);
             } catch (NumberFormatException e) {
-                return CommandResult.error("❌ Group must be a number");
+                return CommandResult.error("Group must be a number");
             }
 
             StringBuilder nameBuilder = new StringBuilder();
@@ -59,33 +68,37 @@ public class EnrollCommand extends BaseCommand {
             }
             String name = nameBuilder.toString();
 
+            if (name.startsWith("\"") && name.endsWith("\"")) {
+                name = name.substring(1, name.length() - 1);
+            }
+
             if (name.trim().isEmpty()) {
-                return CommandResult.error("❌ Student name cannot be empty");
+                return CommandResult.error("Student name cannot be empty");
             }
 
-            if (repository.findStudentByFacultyNumber(facultyNumber) != null) {
-                return CommandResult.error("❌ Student with faculty number " + facultyNumber + " already exists");
+            if (getRepository().findStudentByFacultyNumber(fn) != null) {
+                return CommandResult.error("Student with FN " + fn + " already exists");
             }
 
-            Specialty specialty = repository.findSpecialtyByName(programName);
+            Specialty specialty = getRepository().findSpecialtyByName(programName);
             if (specialty == null) {
-                return CommandResult.error("❌ Specialty '" + programName + "' does not exist");
+                return CommandResult.error("Specialty '" + programName + "' does not exist");
             }
 
-            Student student = new Student(name, facultyNumber, 1, specialty, group);
-            repository.addStudent(student);
-            session.setHasUnsavedChanges(true);
+            Student student = new Student(name, fn, 1, specialty, group);
+            getRepository().addStudent(student);
+            getSession().setHasUnsavedChanges(true);
 
-            return CommandResult.success("✅ Enrolled student: " + name + " (faculty number: " + facultyNumber + ") in " + programName);
+            return CommandResult.success("Enrolled student: " + name + " (FN: " + fn + ") in " + programName);
 
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return CommandResult.error(e.getMessage());
         }
     }
 
     @Override
     public String getUsage() {
-        return "enroll <fn> <program> <group> <name>";
+        return "enroll <fn> \"<program>\" <group> \"<name>\"";
     }
 
     @Override
