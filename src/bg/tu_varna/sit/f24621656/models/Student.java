@@ -32,22 +32,59 @@ public class Student {
         recalculateAverageGrade();
     }
 
-    public String getName() { return name; }
-    public String getFacultyNumber() { return facultyNumber; }
-    public int getCourse() { return course; }
-    public Specialty getSpecialty() { return specialty; }
-    public int getGroup() { return group; }
-    public StudentStatus getStatus() { return status; }
-    public List<Grade> getGrades() { return grades; }
-    public List<Discipline> getEnrolledDisciplines() { return enrolledDisciplines; }
-    public double getAverageGrade() { return averageGrade; }
+    public String getName() {
+        return name;
+    }
 
-    public void setCourse(int course) { this.course = course; }
-    public void setSpecialty(Specialty specialty) { this.specialty = specialty; }
-    public void setGroup(int group) { this.group = group; }
-    public void setStatus(StudentStatus status) { this.status = status; }
+    public String getFacultyNumber() {
+        return facultyNumber;
+    }
 
-    private boolean hasGradeForDiscipline(Discipline discipline) {
+    public int getCourse() {
+        return course;
+    }
+
+    public Specialty getSpecialty() {
+        return specialty;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public StudentStatus getStatus() {
+        return status;
+    }
+
+    public List<Grade> getGrades() {
+        return grades;
+    }
+
+    public List<Discipline> getEnrolledDisciplines() {
+        return enrolledDisciplines;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public void setCourse(int course) {
+        this.course = course;
+    }
+
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public void setStatus(StudentStatus status) {
+        this.status = status;
+    }
+
+    public boolean hasGradeForDiscipline(Discipline discipline) {
         for (Grade grade : grades) {
             if (grade.getDiscipline().equals(discipline)) {
                 return true;
@@ -56,13 +93,18 @@ public class Student {
         return false;
     }
 
-    private Grade getGradeForDiscipline(Discipline discipline) {
+    public Grade getGradeForDiscipline(Discipline discipline) {
         for (Grade grade : grades) {
             if (grade.getDiscipline().equals(discipline)) {
                 return grade;
             }
         }
         return null;
+    }
+
+    private boolean hasPassedDiscipline(Discipline discipline) {
+        Grade grade = getGradeForDiscipline(discipline);
+        return grade != null && grade.isPassed();
     }
 
     private void recalculateAverageGrade() {
@@ -100,55 +142,63 @@ public class Student {
         return true;
     }
 
+    public void addGradeDirectly(Grade grade) {
+        grades.add(grade);
+        recalculateAverageGrade();
+    }
+
+    public void addEnrolledDisciplineDirectly(Discipline discipline) {
+        if (!enrolledDisciplines.contains(discipline)) {
+            enrolledDisciplines.add(discipline);
+            recalculateAverageGrade();
+        }
+    }
+
     public boolean enrollInDiscipline(Discipline discipline) {
         if (!DisciplineEnrollmentValidator.canEnrollInDiscipline(this, discipline)) {
             return false;
         }
-        enrolledDisciplines.add(discipline);
-        recalculateAverageGrade();
+        if (!enrolledDisciplines.contains(discipline)) {
+            enrolledDisciplines.add(discipline);
+            recalculateAverageGrade();
+        }
         return true;
     }
 
     public boolean canAdvance() {
-        int failedMandatory = 0;
+        int failedMandatoryCount = 0;
 
         for (Discipline discipline : specialty.getDisciplines()) {
             if (discipline.getType() == DisciplineType.MANDATORY) {
-                boolean isFromPreviousCourse = false;
-                for (int c : discipline.getAvailableCourses()) {
-                    if (c < course) {
-                        isFromPreviousCourse = true;
+                for (int availableCourse : discipline.getAvailableCourses()) {
+                    if (availableCourse <= course) {
+                        if (!hasPassedDiscipline(discipline)) {
+                            failedMandatoryCount++;
+                        }
                         break;
                     }
                 }
-
-                if (isFromPreviousCourse) {
-                    Grade grade = getGradeForDiscipline(discipline);
-                    if (grade == null || !grade.isPassed()) {
-                        failedMandatory++;
-                    }
-                }
             }
         }
-        return failedMandatory <= 2;
+
+        if (failedMandatoryCount > 2) {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean canGraduate() {
-        for (Discipline discipline : specialty.getDisciplines()) {
-            if (discipline.getType() == DisciplineType.MANDATORY) {
-                Grade grade = getGradeForDiscipline(discipline);
-                if (grade == null || !grade.isPassed()) {
-                    return false;
-                }
-            }
-        }
-
         for (Discipline discipline : enrolledDisciplines) {
-            Grade grade = getGradeForDiscipline(discipline);
-            if (grade == null || !grade.isPassed()) {
+            if (!hasPassedDiscipline(discipline)) {
                 return false;
             }
         }
+
+        if (getRemainingElectiveCredits() > 0) {
+            return false;
+        }
+
         return true;
     }
 
@@ -166,16 +216,13 @@ public class Student {
     public int getRemainingElectiveCredits() {
         int needed = specialty.getMinElectiveCredits();
         int earned = getEarnedElectiveCredits();
-        int remaining = needed - earned;
-        return (remaining > 0) ? remaining : 0;
+        return Math.max(needed - earned, 0);
     }
 
     public List<Grade> getPassedExams() {
         List<Grade> result = new ArrayList<>();
         for (Grade grade : grades) {
-            if (grade.isPassed()) {
-                result.add(grade);
-            }
+            if (grade.isPassed()) result.add(grade);
         }
         return result;
     }
@@ -183,20 +230,21 @@ public class Student {
     public List<Discipline> getFailedExams() {
         List<Discipline> result = new ArrayList<>();
         for (Discipline discipline : enrolledDisciplines) {
-            Grade grade = getGradeForDiscipline(discipline);
-            if (grade == null || !grade.isPassed()) {
-                result.add(discipline);
-            }
+            if (!hasPassedDiscipline(discipline)) result.add(discipline);
         }
         return result;
     }
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Student that = (Student) object;
-        return Objects.equals(facultyNumber, that.facultyNumber);
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Student student = (Student) object;
+        return Objects.equals(facultyNumber, student.facultyNumber);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package bg.tu_varna.sit.f24621656.models;
 
 import bg.tu_varna.sit.f24621656.contracts.DataRepository;
+import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +37,6 @@ public class University implements DataRepository {
     @Override
     public List<Student> getAllStudents() {
         return new ArrayList<>(students);
-    }
-
-    @Override
-    public List<Student> getStudentsBySpecialtyAndCourse(String specialtyName, int course) {
-        List<Student> result = new ArrayList<>();
-        for (Student student : students) {
-            if (student.getSpecialty().getName().equalsIgnoreCase(specialtyName) && student.getCourse() == course) {
-                result.add(student);
-            }
-        }
-        return result;
     }
 
     @Override

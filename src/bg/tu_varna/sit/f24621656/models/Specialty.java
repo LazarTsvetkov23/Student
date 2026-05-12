@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Specialty {
     private final String name;
     private final List<Discipline> disciplines;
-    private int minElectiveCredits;
+    private final int minElectiveCredits;
 
     public Specialty(String name) {
         this.name = name;
@@ -21,24 +21,25 @@ public class Specialty {
         this.minElectiveCredits = minElectiveCredits;
     }
 
-    public String getName() { return name; }
-    public List<Discipline> getDisciplines() { return disciplines; }
-    public int getMinElectiveCredits() { return minElectiveCredits; }
-    public void setMinElectiveCredits(int minElectiveCredits) { this.minElectiveCredits = minElectiveCredits; }
+    public String getName() {
+        return name;
+    }
+
+    public List<Discipline> getDisciplines() {
+        return disciplines;
+    }
+
+    public int getMinElectiveCredits() {
+        return minElectiveCredits;
+    }
 
     public void addDiscipline(Discipline discipline) {
+        if (discipline == null) {
+            return;
+        }
         if (!disciplines.contains(discipline)) {
             disciplines.add(discipline);
         }
-    }
-
-    public Discipline findDisciplineByName(String name) {
-        for (Discipline discipline : disciplines) {
-            if (discipline.getName().equalsIgnoreCase(name)) {
-                return discipline;
-            }
-        }
-        return null;
     }
 
     @Override
