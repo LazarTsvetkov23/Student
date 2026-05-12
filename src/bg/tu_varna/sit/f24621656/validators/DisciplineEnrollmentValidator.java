@@ -10,20 +10,32 @@ public class DisciplineEnrollmentValidator {
         if (student.getStatus() != StudentStatus.ENROLLED) {
             return false;
         }
-        if (!discipline.isAvailableForCourse(student.getCourse())) {
+
+        boolean isAvailable = false;
+        for (int availableCourse : discipline.getAvailableCourses()) {
+            if (availableCourse <= student.getCourse()) {
+                isAvailable = true;
+                break;
+            }
+        }
+        if (!isAvailable) {
             return false;
         }
+
         if (!student.getSpecialty().getDisciplines().contains(discipline)) {
             return false;
         }
+
         if (student.getEnrolledDisciplines().contains(discipline)) {
             return false;
         }
-        for (Grade g : student.getGrades()) {
-            if (g.getDiscipline().equals(discipline)) {
+
+        for (Grade grade : student.getGrades()) {
+            if (grade.getDiscipline().equals(discipline)) {
                 return false;
             }
         }
+
         return true;
     }
 }
