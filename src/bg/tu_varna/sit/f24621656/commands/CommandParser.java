@@ -1,14 +1,15 @@
 package bg.tu_varna.sit.f24621656.commands;
 
-import bg.tu_varna.sit.f24621656.commands.base.CommandResult;
 import bg.tu_varna.sit.f24621656.commands.discipline.AddDisciplineCommand;
 import bg.tu_varna.sit.f24621656.commands.discipline.ListDisciplinesCommand;
 import bg.tu_varna.sit.f24621656.commands.discipline.RemoveDisciplineCommand;
-import bg.tu_varna.sit.f24621656.commands.extra.*;
 import bg.tu_varna.sit.f24621656.commands.file.*;
 import bg.tu_varna.sit.f24621656.commands.grade.AddGradeCommand;
 import bg.tu_varna.sit.f24621656.commands.grade.EnrollInCommand;
 import bg.tu_varna.sit.f24621656.commands.grade.ProtocolCommand;
+import bg.tu_varna.sit.f24621656.commands.grade.ReportCommand;
+import bg.tu_varna.sit.f24621656.commands.other.ExitCommand;
+import bg.tu_varna.sit.f24621656.commands.other.HelpCommand;
 import bg.tu_varna.sit.f24621656.commands.specialty.AddSpecialtyCommand;
 import bg.tu_varna.sit.f24621656.commands.specialty.ListSpecialtiesCommand;
 import bg.tu_varna.sit.f24621656.commands.specialty.RemoveSpecialtyCommand;
@@ -30,6 +31,7 @@ public class CommandParser {
     private void initializeCommands(Session session) {
         registerCommand(new OpenCommand(session));
         registerCommand(new SaveCommand(session));
+        registerCommand(new SaveAsCommand(session));
         registerCommand(new CloseCommand(session));
 
         registerCommand(new AddSpecialtyCommand(session));

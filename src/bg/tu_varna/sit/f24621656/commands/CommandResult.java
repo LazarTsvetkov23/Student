@@ -1,7 +1,5 @@
 package bg.tu_varna.sit.f24621656.commands;
 
-//WORKED
-
 public class CommandResult {
     private final boolean success;
     private final String message;
@@ -22,7 +20,11 @@ public class CommandResult {
     }
 
     public static CommandResult error(String message) {
-        return new CommandResult(false, message, null);
+        String errorMessage = message;
+        if (!message.startsWith("Error:")) {
+            errorMessage = "Error: " + message;
+        }
+        return new CommandResult(false, errorMessage, null);
     }
 
     public boolean isSuccess() {
@@ -31,9 +33,5 @@ public class CommandResult {
 
     public String getMessage() {
         return message;
-    }
-
-    public Object getData() {
-        return data;
     }
 }
