@@ -206,7 +206,7 @@ public class XmlFileManager {
         Path path = Paths.get(filepath);
         Path parent = path.getParent();
         if (parent != null && !Files.exists(parent)) {
-            Files.createDirectories(parent);  // Създава директориите рекурсивно
+            Files.createDirectories(parent);
         }
         Files.write(path, content.getBytes(StandardCharsets.UTF_8));
     }
