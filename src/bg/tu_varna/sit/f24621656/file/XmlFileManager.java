@@ -38,7 +38,7 @@ public class XmlFileManager {
         StringBuilder sb = new StringBuilder();
 
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        sb.append("<university>\n");
+        sb.append("<university>\n\n");
 
         sb.append("  <specialties>\n");
         for (Specialty specialty : repository.getAllSpecialties()) {
@@ -47,7 +47,7 @@ public class XmlFileManager {
             sb.append("      <minElectiveCredits>").append(specialty.getMinElectiveCredits()).append("</minElectiveCredits>\n");
             sb.append("    </specialty>\n");
         }
-        sb.append("  </specialties>\n");
+        sb.append("  </specialties>\n\n");
 
         sb.append("  <disciplines>\n");
         for (Discipline discipline : repository.getAllDisciplines()) {
@@ -62,7 +62,7 @@ public class XmlFileManager {
             sb.append("      </availableCourses>\n");
             sb.append("    </discipline>\n");
         }
-        sb.append("  </disciplines>\n");
+        sb.append("  </disciplines>\n\n");
 
         sb.append("  <students>\n");
         for (Student student : repository.getAllStudents()) {
@@ -88,7 +88,7 @@ public class XmlFileManager {
             sb.append("      </enrolledDisciplines>\n");
             sb.append("    </student>\n");
         }
-        sb.append("  </students>\n");
+        sb.append("  </students>\n\n");
 
         sb.append("</university>\n");
         writeFile(filepath, sb.toString());
@@ -108,7 +108,7 @@ public class XmlFileManager {
                 String creditsStr = extractTagContent(item, "minElectiveCredits");
 
                 int credits;
-                if (creditsStr.isEmpty()) {
+                if (creditsStr == null || creditsStr.isEmpty()) {
                     credits = 0;
                 } else {
                     credits = Integer.parseInt(creditsStr);
@@ -119,6 +119,7 @@ public class XmlFileManager {
         }
 
         String disciplinesSection = extractTagContent(xml, "disciplines");
+        List<Discipline> loadedDisciplines = new ArrayList<>();
         if (disciplinesSection != null) {
             List<String> items = extractTagContents(disciplinesSection, "discipline");
             for (String item : items) {
@@ -135,6 +136,13 @@ public class XmlFileManager {
                     }
                 }
                 repository.addDiscipline(discipline);
+                loadedDisciplines.add(discipline);
+            }
+        }
+
+        for (Specialty specialty : repository.getAllSpecialties()) {
+            for (Discipline discipline : loadedDisciplines) {
+                specialty.addDiscipline(discipline);
             }
         }
 
@@ -153,6 +161,9 @@ public class XmlFileManager {
                 if (specialty == null) {
                     specialty = new Specialty(specialtyName);
                     repository.addSpecialty(specialty);
+                    for (Discipline discipline : loadedDisciplines) {
+                        specialty.addDiscipline(discipline);
+                    }
                 }
 
                 Student student = new Student(name, fn, course, specialty, group);
@@ -166,7 +177,7 @@ public class XmlFileManager {
                         double value = Double.parseDouble(extractTagContent(gradeXml, "value"));
                         Discipline discipline = repository.findDisciplineByName(discName);
                         if (discipline != null) {
-                            student.addGrade(new Grade(discipline, value));
+                            student.addGradeDirectly(new Grade(discipline, value));
                         }
                     }
                 }
@@ -177,7 +188,7 @@ public class XmlFileManager {
                     for (String discName : enrolledItems) {
                         Discipline discipline = repository.findDisciplineByName(discName);
                         if (discipline != null) {
-                            student.enrollInDiscipline(discipline);
+                            student.addEnrolledDisciplineDirectly(discipline);
                         }
                     }
                 }
@@ -195,7 +206,7 @@ public class XmlFileManager {
         Path path = Paths.get(filepath);
         Path parent = path.getParent();
         if (parent != null && !Files.exists(parent)) {
-            Files.createDirectories(parent);
+            Files.createDirectories(parent);  // Създава директориите рекурсивно
         }
         Files.write(path, content.getBytes(StandardCharsets.UTF_8));
     }
