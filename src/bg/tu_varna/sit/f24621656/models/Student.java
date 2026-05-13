@@ -170,22 +170,16 @@ public class Student {
 
         for (Discipline discipline : specialty.getDisciplines()) {
             if (discipline.getType() == DisciplineType.MANDATORY) {
-                for (int availableCourse : discipline.getAvailableCourses()) {
-                    if (availableCourse <= course) {
-                        if (!hasPassedDiscipline(discipline)) {
-                            failedMandatoryCount++;
-                        }
-                        break;
+                // Проверка дали дисциплината е за курс <= текущия курс на студента
+                if (discipline.getCourse() <= course) {
+                    if (!hasPassedDiscipline(discipline)) {
+                        failedMandatoryCount++;
                     }
                 }
             }
         }
 
-        if (failedMandatoryCount > 2) {
-            return false;
-        }
-
-        return true;
+        return failedMandatoryCount <= 2;
     }
 
     public boolean canGraduate() {

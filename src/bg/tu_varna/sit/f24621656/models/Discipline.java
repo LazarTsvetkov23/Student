@@ -10,13 +10,13 @@ public class Discipline {
     private final String name;
     private final DisciplineType type;
     private int credits;
-    private final List<Integer> availableCourses;
+    private final int course;
 
-    public Discipline(String name, DisciplineType type) {
+    public Discipline(String name, DisciplineType type, int course) {
         this.name = name;
         this.type = type;
         this.credits = 0;
-        this.availableCourses = new ArrayList<>();
+        this.course = course;
     }
 
     public String getName() {
@@ -37,14 +37,8 @@ public class Discipline {
         }
     }
 
-    public List<Integer> getAvailableCourses() {
-        return availableCourses;
-    }
-
-    public void addAvailableCourse(int course) {
-        if (!availableCourses.contains(course)) {
-            availableCourses.add(course);
-        }
+    public int getCourse() {
+        return course;
     }
 
     @Override
