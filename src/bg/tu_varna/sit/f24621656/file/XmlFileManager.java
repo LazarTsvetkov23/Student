@@ -55,11 +55,7 @@ public class XmlFileManager {
             sb.append("      <name>").append(xmlEscape(discipline.getName())).append("</name>\n");
             sb.append("      <type>").append(discipline.getType()).append("</type>\n");
             sb.append("      <credits>").append(discipline.getCredits()).append("</credits>\n");
-            sb.append("      <availableCourses>\n");
-            for (int course : discipline.getAvailableCourses()) {
-                sb.append("        <course>").append(course).append("</course>\n");
-            }
-            sb.append("      </availableCourses>\n");
+            sb.append("      <course>").append(discipline.getCourse()).append("</course>\n");
             sb.append("    </discipline>\n");
         }
         sb.append("  </disciplines>\n\n");
@@ -126,15 +122,21 @@ public class XmlFileManager {
                 String name = extractTagContent(item, "name");
                 DisciplineType type = DisciplineType.valueOf(extractTagContent(item, "type"));
                 int credits = Integer.parseInt(extractTagContent(item, "credits"));
-                Discipline discipline = new Discipline(name, type);
-                discipline.setCredits(credits);
-                String coursesSection = extractTagContent(item, "availableCourses");
-                if (coursesSection != null) {
-                    List<String> courseItems = extractTagContents(coursesSection, "course");
-                    for (String courseStr : courseItems) {
-                        discipline.addAvailableCourse(Integer.parseInt(courseStr.trim()));
-                    }
+                String courseStr = extractTagContent(item, "course");
+                if (courseStr == null || courseStr.isEmpty()) {
+                    throw new IOException("Missing <course> tag in discipline: " + name);
                 }
+                int course;
+                try {
+                    course = Integer.parseInt(courseStr);
+                } catch (NumberFormatException e) {
+                    throw new IOException("Invalid course number: " + courseStr + " for discipline: " + name);
+                }
+                if (course < 1 || course > 4) {
+                    throw new IOException("Course must be between 1 and 4 for discipline: " + name);
+                }
+                Discipline discipline = new Discipline(name, type, course);
+                discipline.setCredits(credits);
                 repository.addDiscipline(discipline);
                 loadedDisciplines.add(discipline);
             }
