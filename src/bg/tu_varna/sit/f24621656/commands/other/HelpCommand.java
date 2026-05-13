@@ -22,6 +22,7 @@ public class HelpCommand implements Command {
         sb.append("FILE COMMANDS:\n");
         sb.append("  open <file>     - Opens an XML file\n");
         sb.append("  save            - Saves data to the current file\n");
+        sb.append("  saveas <file>   - Saves data to a new file\n");
         sb.append("  close           - Closes the current file\n\n");
 
         sb.append("SPECIALTY COMMANDS:\n");

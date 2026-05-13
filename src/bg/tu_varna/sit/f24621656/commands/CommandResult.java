@@ -3,20 +3,14 @@ package bg.tu_varna.sit.f24621656.commands;
 public class CommandResult {
     private final boolean success;
     private final String message;
-    private final Object data;
 
-    private CommandResult(boolean success, String message, Object data) {
+    private CommandResult(boolean success, String message) {
         this.success = success;
         this.message = message;
-        this.data = data;
     }
 
     public static CommandResult success(String message) {
-        return new CommandResult(true, message, null);
-    }
-
-    public static CommandResult success(String message, Object data) {
-        return new CommandResult(true, message, data);
+        return new CommandResult(true, message);
     }
 
     public static CommandResult error(String message) {
@@ -24,7 +18,7 @@ public class CommandResult {
         if (!message.startsWith("Error:")) {
             errorMessage = "Error: " + message;
         }
-        return new CommandResult(false, errorMessage, null);
+        return new CommandResult(false, errorMessage);
     }
 
     public boolean isSuccess() {
