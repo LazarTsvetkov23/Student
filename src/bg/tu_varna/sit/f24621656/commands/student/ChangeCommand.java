@@ -2,6 +2,10 @@ package bg.tu_varna.sit.f24621656.commands.student;
 
 import bg.tu_varna.sit.f24621656.commands.BaseCommand;
 import bg.tu_varna.sit.f24621656.commands.CommandResult;
+import bg.tu_varna.sit.f24621656.enums.DisciplineType;
+import bg.tu_varna.sit.f24621656.enums.StudentStatus;
+import bg.tu_varna.sit.f24621656.models.Discipline;
+import bg.tu_varna.sit.f24621656.models.Grade;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
@@ -17,7 +21,6 @@ public class ChangeCommand extends BaseCommand {
             if (args.length < 4) {
                 return CommandResult.error("Usage: change <fn> <option> <value>");
             }
-
             if (!getSession().isFileOpen()) {
                 return CommandResult.error("No file is open. Use 'open' first.");
             }
@@ -29,21 +32,17 @@ public class ChangeCommand extends BaseCommand {
             if (student == null) {
                 return CommandResult.error("Student with FN " + fn + " not found");
             }
-
-            if (student.getStatus() != bg.tu_varna.sit.f24621656.enums.StudentStatus.ENROLLED) {
+            if (student.getStatus() != StudentStatus.ENROLLED) {
                 return CommandResult.error("Student is not enrolled. Current status: " + student.getStatus());
             }
 
             if (option.equals("program")) {
                 StringBuilder programBuilder = new StringBuilder();
                 for (int i = 3; i < args.length; i++) {
-                    if (i > 3) {
-                        programBuilder.append(" ");
-                    }
+                    if (i > 3) programBuilder.append(" ");
                     programBuilder.append(args[i]);
                 }
                 String newProgram = programBuilder.toString();
-
                 if (newProgram.startsWith("\"") && newProgram.endsWith("\"")) {
                     newProgram = newProgram.substring(1, newProgram.length() - 1);
                 }
@@ -53,9 +52,26 @@ public class ChangeCommand extends BaseCommand {
                     return CommandResult.error("Specialty '" + newProgram + "' does not exist");
                 }
 
+                int failedMandatory = 0;
+                for (Discipline discipline : newSpecialty.getDisciplines()) {
+                    if (discipline.getType() == DisciplineType.MANDATORY) {
+                        if (discipline.getCourse() <= student.getCourse()) {
+                            Grade grade = student.getGradeForDiscipline(discipline);
+                            if (grade == null || !grade.isPassed()) {
+                                failedMandatory++;
+                            }
+                        }
+                    }
+                }
+                if (failedMandatory > 2) {
+                    return CommandResult.error("Cannot change specialty: " + failedMandatory +
+                            " mandatory subjects failed (max 2 allowed)");
+                }
+
                 student.setSpecialty(newSpecialty);
                 getSession().setHasUnsavedChanges(true);
                 return CommandResult.success("Student " + fn + " changed specialty to " + newProgram);
+
             } else if (option.equals("group")) {
                 int newGroup;
                 try {
@@ -63,9 +79,14 @@ public class ChangeCommand extends BaseCommand {
                 } catch (NumberFormatException e) {
                     return CommandResult.error("Group must be a number");
                 }
+
+                if (newGroup <= 0) {
+                    return CommandResult.error("Group must be a positive number");
+                }
                 student.setGroup(newGroup);
                 getSession().setHasUnsavedChanges(true);
                 return CommandResult.success("Student " + fn + " changed group to " + newGroup);
+
             } else if (option.equals("year")) {
                 int newYear;
                 try {
@@ -82,10 +103,10 @@ public class ChangeCommand extends BaseCommand {
                 student.setCourse(newYear);
                 getSession().setHasUnsavedChanges(true);
                 return CommandResult.success("Student " + fn + " changed year to " + newYear);
+
             } else {
                 return CommandResult.error("Invalid option. Use: program, group, or year");
             }
-
 
         } catch (Exception e) {
             return CommandResult.error(e.getMessage());

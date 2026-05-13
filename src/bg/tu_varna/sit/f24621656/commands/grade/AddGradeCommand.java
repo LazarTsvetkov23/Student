@@ -67,6 +67,10 @@ public class AddGradeCommand extends BaseCommand {
                 return CommandResult.error("Student is not enrolled in " + disciplineName + ". Use 'enrollin' first.");
             }
 
+            if (student.getGradeForDiscipline(discipline) != null) {
+                return CommandResult.error("Student already has a grade in " + disciplineName);
+            }
+
             Grade grade = new Grade(discipline, gradeValue);
             student.addGrade(grade);
             getSession().setHasUnsavedChanges(true);

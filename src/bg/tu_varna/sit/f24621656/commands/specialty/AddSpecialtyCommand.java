@@ -2,6 +2,7 @@ package bg.tu_varna.sit.f24621656.commands.specialty;
 
 import bg.tu_varna.sit.f24621656.commands.BaseCommand;
 import bg.tu_varna.sit.f24621656.commands.CommandResult;
+import bg.tu_varna.sit.f24621656.models.Discipline;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.session.Session;
 
@@ -67,6 +68,11 @@ public class AddSpecialtyCommand extends BaseCommand {
 
             Specialty specialty = new Specialty(name, minCredits);
             getRepository().addSpecialty(specialty);
+
+            for (Discipline discipline : getRepository().getAllDisciplines()) {
+                specialty.addDiscipline(discipline);
+            }
+
             getSession().setHasUnsavedChanges(true);
 
             return CommandResult.success("Added specialty: " + name + " (min credits: " + minCredits + ")");

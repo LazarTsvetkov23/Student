@@ -32,12 +32,8 @@ public class ListDisciplinesCommand extends BaseCommand {
                 sb.append(i + 1).append(". ").append(d.getName())
                         .append(" (").append(d.getType())
                         .append(", credits: ").append(d.getCredits())
-                        .append(", courses: ");
-                for (int j = 0; j < d.getAvailableCourses().size(); j++) {
-                    if (j > 0) sb.append(",");
-                    sb.append(d.getAvailableCourses().get(j));
-                }
-                sb.append(")\n");
+                        .append(", course: ").append(d.getCourse())   // ← един курс, без цикъл
+                        .append(")\n");
             }
             return CommandResult.success(sb.toString());
 

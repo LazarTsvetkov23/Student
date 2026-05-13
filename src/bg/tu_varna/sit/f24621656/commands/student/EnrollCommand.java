@@ -59,6 +59,10 @@ public class EnrollCommand extends BaseCommand {
                 return CommandResult.error("Group must be a number");
             }
 
+            if (group <= 0) {
+                return CommandResult.error("Group must be a positive number");
+            }
+
             StringBuilder nameBuilder = new StringBuilder();
             for (int i = groupIndex + 1; i < args.length; i++) {
                 if (i > groupIndex + 1) {

@@ -31,9 +31,9 @@ public class HelpCommand implements Command {
         sb.append("  removespecialty \"<name>\"              - Removes a specialty\n\n");
 
         sb.append("DISCIPLINE COMMANDS:\n");
-        sb.append("  adddiscipline \"<name>\" <type> <credits> (<course> or \"<courses>\")    - Adds a discipline\n");
-        sb.append("  listdisciplines                                                      - Lists all disciplines\n");
-        sb.append("  removediscipline \"<name>\"                                            - Removes a discipline\n\n");
+        sb.append("  adddiscipline \"<name>\" <type> <credits> <course>    - Adds a discipline\n");
+        sb.append("  listdisciplines                                     - Lists all disciplines\n");
+        sb.append("  removediscipline \"<name>\"                           - Removes a discipline\n\n");
 
         sb.append("STUDENT COMMANDS:\n");
         sb.append("  enroll <fn> \"<program>\" <group> \"<name>\"    - Enrolls a student\n");

@@ -50,23 +50,22 @@ public class AddDisciplineCommand extends BaseCommand {
                 return CommandResult.error(creditValidationError);
             }
 
-            Set<Integer> courses = parseAndValidateCourses(args[coursesIndex]);
-            if (courses == null) {
-                return CommandResult.error("Invalid course numbers. Courses must be between 1 and 4, separated by commas.");
+            int course;
+            try {
+                course = Integer.parseInt(args[coursesIndex]);
+            } catch (NumberFormatException e) {
+                return CommandResult.error("Course must be a number between 1 and 4");
             }
-            if (courses.isEmpty()) {
-                return CommandResult.error("At least one valid course must be specified");
+            if (course < 1 || course > 4) {
+                return CommandResult.error("Course must be between 1 and 4");
             }
 
             if (getRepository().findDisciplineByName(name) != null) {
                 return CommandResult.error("Discipline already exists: " + name);
             }
 
-            Discipline discipline = new Discipline(name, type);
+            Discipline discipline = new Discipline(name, type, course);
             discipline.setCredits(credits);
-            for (int course : courses) {
-                discipline.addAvailableCourse(course);
-            }
 
             getRepository().addDiscipline(discipline);
 
@@ -79,8 +78,8 @@ public class AddDisciplineCommand extends BaseCommand {
             getSession().setHasUnsavedChanges(true);
 
             String successMessage = String.format(
-                    "Added discipline: %s (%s, credits: %d, courses: %s) [added to %d specialty/ies]",
-                    name, type, credits, formatCourses(courses), addedToSpecialties
+                    "Added discipline: %s (%s, credits: %d, course: %s) [added to %d specialty/ies]",
+                    name, type, credits, course, addedToSpecialties
             );
             return CommandResult.success(successMessage);
 
@@ -131,54 +130,9 @@ public class AddDisciplineCommand extends BaseCommand {
         return null;
     }
 
-    private Set<Integer> parseAndValidateCourses(String coursesStr) {
-        if (coursesStr.startsWith("\"") && coursesStr.endsWith("\"")) {
-            coursesStr = coursesStr.substring(1, coursesStr.length() - 1);
-        }
-
-        if (coursesStr.trim().isEmpty()) {
-            return null;
-        }
-
-        Set<Integer> courses = new HashSet<>();
-        String[] parts = coursesStr.split(",");
-
-        for (String part : parts) {
-            String trimmed = part.trim();
-            if (trimmed.isEmpty()) {
-                continue;
-            }
-            try {
-                int courseNum = Integer.parseInt(trimmed);
-                if (courseNum < 1 || courseNum > 4) {
-                    return null;
-                }
-                courses.add(courseNum);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-
-        return courses;
-    }
-
-    private String formatCourses(Set<Integer> courses) {
-        StringBuilder sb = new StringBuilder();
-
-        int i = 0;
-
-        for (int course : courses) {
-            if (i++ > 0) {
-                sb.append(",");
-            }
-            sb.append(course);
-        }
-        return sb.toString();
-    }
-
     @Override
     public String getUsage() {
-        return "adddiscipline \"<name>\" <type> <credits> (<course> or \"<courses>\")";
+        return "adddiscipline \"<name>\" <type> <credits> <course>";
     }
 
     @Override

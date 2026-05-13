@@ -33,6 +33,10 @@ public class AdvanceCommand extends BaseCommand {
                 return CommandResult.error("Student is not enrolled. Current status: " + student.getStatus());
             }
 
+            if (student.getCourse() >= 4) {
+                return CommandResult.error("Student is already in 4th year. Cannot advance further.");
+            }
+
             if (!student.canAdvance()) {
                 return CommandResult.error("Student cannot advance to next course (too many failed mandatory subjects)");
             }
