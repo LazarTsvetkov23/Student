@@ -34,59 +34,58 @@ public class ChangeCommand extends BaseCommand {
                 return CommandResult.error("Student is not enrolled. Current status: " + student.getStatus());
             }
 
-            switch (option) {
-                case "program": {
-                    StringBuilder programBuilder = new StringBuilder();
-                    for (int i = 3; i < args.length; i++) {
-                        if (i > 3) programBuilder.append(" ");
-                        programBuilder.append(args[i]);
+            if (option.equals("program")) {
+                StringBuilder programBuilder = new StringBuilder();
+                for (int i = 3; i < args.length; i++) {
+                    if (i > 3) {
+                        programBuilder.append(" ");
                     }
-                    String newProgram = programBuilder.toString();
-
-                    if (newProgram.startsWith("\"") && newProgram.endsWith("\"")) {
-                        newProgram = newProgram.substring(1, newProgram.length() - 1);
-                    }
-
-                    Specialty newSpecialty = getRepository().findSpecialtyByName(newProgram);
-                    if (newSpecialty == null) {
-                        return CommandResult.error("Specialty '" + newProgram + "' does not exist");
-                    }
-
-                    student.setSpecialty(newSpecialty);
-                    getSession().setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed specialty to " + newProgram);
+                    programBuilder.append(args[i]);
                 }
-                case "group": {
-                    int newGroup;
-                    try {
-                        newGroup = Integer.parseInt(args[3]);
-                    } catch (NumberFormatException e) {
-                        return CommandResult.error("Group must be a number");
-                    }
-                    student.setGroup(newGroup);
-                    getSession().setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed group to " + newGroup);
+                String newProgram = programBuilder.toString();
+
+                if (newProgram.startsWith("\"") && newProgram.endsWith("\"")) {
+                    newProgram = newProgram.substring(1, newProgram.length() - 1);
                 }
-                case "year": {
-                    int newYear;
-                    try {
-                        newYear = Integer.parseInt(args[3]);
-                    } catch (NumberFormatException e) {
-                        return CommandResult.error("Year must be a number");
-                    }
-                    if (newYear != student.getCourse() + 1) {
-                        return CommandResult.error("Can only change to next course (year " + (student.getCourse() + 1) + ")");
-                    }
-                    if (!student.canAdvance()) {
-                        return CommandResult.error("Student cannot advance to next course (too many failed mandatory subjects)");
-                    }
-                    student.setCourse(newYear);
-                    getSession().setHasUnsavedChanges(true);
-                    return CommandResult.success("Student " + fn + " changed year to " + newYear);
+
+                Specialty newSpecialty = getRepository().findSpecialtyByName(newProgram);
+                if (newSpecialty == null) {
+                    return CommandResult.error("Specialty '" + newProgram + "' does not exist");
                 }
-                default:
-                    return CommandResult.error("Invalid option. Use: program, group, or year");
+
+                student.setSpecialty(newSpecialty);
+                getSession().setHasUnsavedChanges(true);
+                return CommandResult.success("Student " + fn + " changed specialty to " + newProgram);
+            } else if (option.equals("group")) {
+                int newGroup;
+                try {
+                    newGroup = Integer.parseInt(args[3]);
+                } catch (NumberFormatException e) {
+                    return CommandResult.error("Group must be a number");
+                }
+                student.setGroup(newGroup);
+                getSession().setHasUnsavedChanges(true);
+                return CommandResult.success("Student " + fn + " changed group to " + newGroup);
+            } else if (option.equals("year")) {
+                int newYear;
+                try {
+                    newYear = Integer.parseInt(args[3]);
+                } catch (NumberFormatException e) {
+                    return CommandResult.error("Year must be a number");
+                }
+                if (newYear != student.getCourse() + 1) {
+                    return CommandResult.error("Can only change to next course (year " + (student.getCourse() + 1) + ")");
+                }
+                if (!student.canAdvance()) {
+                    return CommandResult.error("Student cannot advance to next course (too many failed mandatory subjects)");
+                }
+                student.setCourse(newYear);
+                getSession().setHasUnsavedChanges(true);
+                return CommandResult.success("Student " + fn + " changed year to " + newYear);
+            } else {
+                return CommandResult.error("Invalid option. Use: program, group, or year");
             }
+
 
         } catch (Exception e) {
             return CommandResult.error(e.getMessage());
