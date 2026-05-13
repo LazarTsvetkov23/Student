@@ -11,14 +11,7 @@ public class DisciplineEnrollmentValidator {
             return false;
         }
 
-        boolean isAvailable = false;
-        for (int availableCourse : discipline.getAvailableCourses()) {
-            if (availableCourse <= student.getCourse()) {
-                isAvailable = true;
-                break;
-            }
-        }
-        if (!isAvailable) {
+        if (discipline.getCourse() != student.getCourse()) {
             return false;
         }
 
