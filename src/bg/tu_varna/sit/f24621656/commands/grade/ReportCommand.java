@@ -9,11 +9,31 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.util.List;
 
+/**
+ * Displays an academic report for a student.
+ * Includes passed exams (with grades), failed exams (disciplines without grade or grade <3.00),
+ * average grade (with failed ones counted as 2.00), earned and remaining elective credits.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ReportCommand extends BaseCommand {
+    /**
+     * Constructs a ReportCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ReportCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the report command.
+     * Expected format: report <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult with the academic report
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

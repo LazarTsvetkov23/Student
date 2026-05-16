@@ -7,11 +7,29 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.io.IOException;
 
+/**
+ * Saves the current data to the currently open file.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class SaveCommand extends BaseCommand {
+    /**
+     * Constructs a SaveCommand with the given session.
+     *
+     * @param session the current session
+     */
     public SaveCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the save command.
+     * Writes all data to the current file path and resets the unsaved changes flag.
+     *
+     * @param args no arguments expected
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

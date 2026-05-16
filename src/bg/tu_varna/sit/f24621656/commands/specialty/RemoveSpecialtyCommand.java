@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Removes a specialty from the system.
+ * Fails if there are any students enrolled in that specialty.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class RemoveSpecialtyCommand extends BaseCommand {
+    /**
+     * Constructs a RemoveSpecialtyCommand with the given session.
+     *
+     * @param session the current session
+     */
     public RemoveSpecialtyCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the remove specialty command.
+     * Expects: removespecialty "<name>"
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

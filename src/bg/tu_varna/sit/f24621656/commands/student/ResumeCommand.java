@@ -6,11 +6,29 @@ import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Resumes an interrupted student (sets status back to ENROLLED).
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ResumeCommand extends BaseCommand {
+    /**
+     * Constructs a ResumeCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ResumeCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the resume command.
+     * Expects: resume <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

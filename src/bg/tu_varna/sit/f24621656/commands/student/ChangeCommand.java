@@ -10,11 +10,32 @@ import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Changes a student's program (specialty), group, or year (course).
+ * Changing program validates mandatory disciplines from the new specialty.
+ * Changing year is only allowed to the next course and requires canAdvance().
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ChangeCommand extends BaseCommand {
+    /**
+     * Constructs a ChangeCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ChangeCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the change command.
+     * Expected format: change <fn> <option> <value>
+     * Options: program, group, year.
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
@@ -39,7 +60,9 @@ public class ChangeCommand extends BaseCommand {
             if (option.equals("program")) {
                 StringBuilder programBuilder = new StringBuilder();
                 for (int i = 3; i < args.length; i++) {
-                    if (i > 3) programBuilder.append(" ");
+                    if (i > 3) {
+                        programBuilder.append(" ");
+                    }
                     programBuilder.append(args[i]);
                 }
                 String newProgram = programBuilder.toString();

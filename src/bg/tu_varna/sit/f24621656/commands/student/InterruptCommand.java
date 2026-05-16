@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Interrupts a student's studies (sets status to INTERRUPTED).
+ * Interrupted students cannot enroll in disciplines, receive grades, or change program/group/year.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class InterruptCommand extends BaseCommand {
+    /**
+     * Constructs an InterruptCommand with the given session.
+     *
+     * @param session the current session
+     */
     public InterruptCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the interrupt command.
+     * Expects: interrupt <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

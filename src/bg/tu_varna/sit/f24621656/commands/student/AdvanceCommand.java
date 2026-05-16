@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Advances a student to the next course (year), if conditions are met.
+ * A student can advance if they have at most 2 failed mandatory disciplines from previous courses.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class AdvanceCommand extends BaseCommand {
+    /**
+     * Constructs an AdvanceCommand with the given session.
+     *
+     * @param session the current session
+     */
     public AdvanceCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the advance command.
+     * Expects: advance <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

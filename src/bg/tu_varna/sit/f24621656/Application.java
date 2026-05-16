@@ -8,7 +8,20 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.util.Scanner;
 
+/**
+ * Main application entry point.
+ * Initializes the repository, session, command parser and starts the interactive console loop.
+ *
+ * @author Lazar Tsvetkov
+ */
 public class Application {
+  /**
+   * The main method that starts the student information system.
+   * Displays a welcome message, reads user input from the console,
+   * parses and executes commands until "exit" is entered.
+   *
+   * @param args command line arguments (not used)
+   */
   public static void main(String[] args) {
     DataRepository repository = new University();
     Session session = new Session(repository);

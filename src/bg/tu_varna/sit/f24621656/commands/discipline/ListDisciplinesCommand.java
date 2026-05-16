@@ -7,11 +7,29 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.util.List;
 
+/**
+ * Lists all disciplines in the system.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ListDisciplinesCommand extends BaseCommand {
+    /**
+     * Constructs a ListDisciplinesCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ListDisciplinesCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the list disciplines command.
+     * Displays each discipline's name, type, credits, and course.
+     *
+     * @param args no arguments expected
+     * @return CommandResult with the list or an empty message
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
@@ -28,11 +46,11 @@ public class ListDisciplinesCommand extends BaseCommand {
             sb.append("\nDisciplines List:\n");
             sb.append("----------------\n");
             for (int i = 0; i < disciplines.size(); i++) {
-                Discipline d = disciplines.get(i);
-                sb.append(i + 1).append(". ").append(d.getName())
-                        .append(" (").append(d.getType())
-                        .append(", credits: ").append(d.getCredits())
-                        .append(", course: ").append(d.getCourse())   // ← един курс, без цикъл
+                Discipline discipline = disciplines.get(i);
+                sb.append(i + 1).append(". ").append(discipline.getName())
+                        .append(" (").append(discipline.getType())
+                        .append(", credits: ").append(discipline.getCredits())
+                        .append(", course: ").append(discipline.getCourse())
                         .append(")\n");
             }
             return CommandResult.success(sb.toString());

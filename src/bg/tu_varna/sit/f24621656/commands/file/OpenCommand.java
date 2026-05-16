@@ -9,11 +9,31 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Opens an XML file and loads its data into the repository.
+ * If the file does not exist, a new empty session is created.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class OpenCommand extends BaseCommand {
+    /**
+     * Constructs an OpenCommand with the given session.
+     *
+     * @param session the current session
+     */
     public OpenCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the open command.
+     * Validates the file extension, checks if another file is already open,
+     * then either loads existing data or initializes an empty session.
+     *
+     * @param args command arguments: args[1] is the file name/path
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
@@ -69,16 +89,31 @@ public class OpenCommand extends BaseCommand {
         }
     }
 
+    /**
+     * Returns the usage string.
+     *
+     * @return usage
+     */
     @Override
     public String getUsage() {
         return "open <filename.xml>";
     }
 
+    /**
+     * Returns the description.
+     *
+     * @return description
+     */
     @Override
     public String getDescription() {
         return "Opens an XML file";
     }
 
+    /**
+     * Returns the command name.
+     *
+     * @return "open"
+     */
     @Override
     public String getName() {
         return "open";

@@ -4,11 +4,30 @@ import bg.tu_varna.sit.f24621656.commands.BaseCommand;
 import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Closes the currently open file.
+ * Fails if there are unsaved changes.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class CloseCommand extends BaseCommand {
+    /**
+     * Constructs a CloseCommand with the given session.
+     *
+     * @param session the current session
+     */
     public CloseCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the close command.
+     * Checks for unsaved changes, then closes the session and clears the repository.
+     *
+     * @param args no arguments expected
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

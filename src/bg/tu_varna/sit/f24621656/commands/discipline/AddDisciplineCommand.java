@@ -7,14 +7,30 @@ import bg.tu_varna.sit.f24621656.models.Discipline;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.session.Session;
 
-import java.util.HashSet;
-import java.util.Set;
-
+/**
+ * Adds a new discipline to the system.
+ * The discipline is automatically added to all existing specialties.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class AddDisciplineCommand extends BaseCommand {
+    /**
+     * Constructs an AddDisciplineCommand with the given session.
+     *
+     * @param session the current session
+     */
     public AddDisciplineCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the add discipline command.
+     * Expected format: adddiscipline "<name>" <type> <credits> <course>
+     *
+     * @param args command arguments
+     * @return CommandResult with success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

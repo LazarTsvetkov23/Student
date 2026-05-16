@@ -9,11 +9,31 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.util.List;
 
+/**
+ * Displays a protocol for a discipline.
+ * Groups students by specialty and course, sorted by faculty number.
+ * Shows each student's grade (or "not taken") and status (PASSED/FAILED/PENDING).
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ProtocolCommand extends BaseCommand {
+    /**
+     * Constructs a ProtocolCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ProtocolCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the protocol command.
+     * Expected format: protocol "<discipline>"
+     *
+     * @param args command arguments
+     * @return CommandResult with the formatted protocol
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

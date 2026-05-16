@@ -20,14 +20,32 @@ import bg.tu_varna.sit.f24621656.session.Session;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Parses user input and executes the corresponding command.
+ * Maintains a registry of all available commands.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class CommandParser {
+    /** Map of command name to Command instance. */
     private final Map<String, Command> commands;
 
+    /**
+     * Constructs a CommandParser and registers all commands with the given session.
+     *
+     * @param session the current session (shared with all commands)
+     */
     public CommandParser(Session session) {
         this.commands = new HashMap<>();
         initializeCommands(session);
     }
 
+    /**
+     * Registers all command implementations.
+     *
+     * @param session the current session
+     */
     private void initializeCommands(Session session) {
         registerCommand(new OpenCommand(session));
         registerCommand(new SaveCommand(session));
@@ -59,10 +77,21 @@ public class CommandParser {
         registerCommand(new HelpCommand(commands));
     }
 
+    /**
+     * Adds a command to the registry.
+     *
+     * @param command the command to register
+     */
     private void registerCommand(Command command) {
         commands.put(command.getName(), command);
     }
 
+    /**
+     * Parses the input string, finds the command and executes it.
+     *
+     * @param input the raw user input (e.g., "open file.xml")
+     * @return the result of the command execution
+     */
     public CommandResult parseAndExecute(String input) {
         if (input == null || input.trim().isEmpty()) {
             return CommandResult.success("");

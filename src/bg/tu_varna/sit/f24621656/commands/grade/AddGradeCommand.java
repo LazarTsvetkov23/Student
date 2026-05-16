@@ -7,11 +7,31 @@ import bg.tu_varna.sit.f24621656.models.Grade;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Adds a grade for a student in a specific discipline.
+ * Grade must be between 2.00 and 6.00 inclusive.
+ * The student must be enrolled in the discipline and must not already have a grade for it.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class AddGradeCommand extends BaseCommand {
+    /**
+     * Constructs an AddGradeCommand with the given session.
+     *
+     * @param session the current session
+     */
     public AddGradeCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the addgrade command.
+     * Expected format: addgrade <fn> "<discipline>" <grade>
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

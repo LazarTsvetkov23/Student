@@ -8,11 +8,31 @@ import bg.tu_varna.sit.f24621656.models.Grade;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Enrolls a student in a discipline (subject).
+ * Enrollment is allowed only if the discipline belongs to the student's specialty,
+ * matches the student's current course, and the student is not already enrolled or graded.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class EnrollInCommand extends BaseCommand {
+    /**
+     * Constructs an EnrollInCommand with the given session.
+     *
+     * @param session the current session
+     */
     public EnrollInCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the enrollin command.
+     * Expected format: enrollin <fn> "<discipline>"
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
@@ -28,16 +48,16 @@ public class EnrollInCommand extends BaseCommand {
 
             StringBuilder disciplineBuilder = new StringBuilder();
             for (int i = 2; i < args.length; i++) {
-                if (i > 2) disciplineBuilder.append(" ");
+                if (i > 2) {
+                    disciplineBuilder.append(" ");
+                }
                 disciplineBuilder.append(args[i]);
             }
             String disciplineName = disciplineBuilder.toString();
 
-            // ========== НОВА ПРОВЕРКА: задължителни кавички ==========
             if (!disciplineName.startsWith("\"") || !disciplineName.endsWith("\"")) {
                 return CommandResult.error("Discipline name must be enclosed in quotes: \"<discipline>\"");
             }
-            // Премахване на кавичките
             disciplineName = disciplineName.substring(1, disciplineName.length() - 1);
 
             Student student = getRepository().findStudentByFacultyNumber(fn);
@@ -50,7 +70,6 @@ public class EnrollInCommand extends BaseCommand {
                 return CommandResult.error("Discipline '" + disciplineName + "' not found");
             }
 
-            // Проверка за точен курс
             if (discipline.getCourse() != student.getCourse()) {
                 return CommandResult.error("Discipline '" + disciplineName +
                         "' is for course " + discipline.getCourse() +

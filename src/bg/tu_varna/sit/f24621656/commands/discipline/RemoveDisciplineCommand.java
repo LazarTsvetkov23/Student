@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.models.Discipline;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Removes a discipline from the system.
+ * Fails if there are any students enrolled in that discipline.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class RemoveDisciplineCommand extends BaseCommand {
+    /**
+     * Constructs a RemoveDisciplineCommand with the given session.
+     *
+     * @param session the current session
+     */
     public RemoveDisciplineCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the remove discipline command.
+     * Expects: removediscipline "<name>"
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

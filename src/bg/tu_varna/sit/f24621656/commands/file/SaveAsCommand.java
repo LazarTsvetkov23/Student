@@ -10,11 +10,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Saves the current data to a new file (with a different name or path).
+ * After saving, the new file becomes the current file.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class SaveAsCommand extends BaseCommand {
+    /**
+     * Constructs a SaveAsCommand with the given session.
+     *
+     * @param session the current session
+     */
     public SaveAsCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the save as command.
+     * Validates the new file name, creates directories if needed,
+     * saves the data, and updates the session's current file path.
+     *
+     * @param args arguments: args[1] is the new file name/path
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

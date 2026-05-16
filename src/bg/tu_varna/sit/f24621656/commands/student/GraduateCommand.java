@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.enums.StudentStatus;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Marks a student as graduated.
+ * A student can graduate only if all enrolled disciplines are passed and remaining elective credits are 0.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class GraduateCommand extends BaseCommand {
+    /**
+     * Constructs a GraduateCommand with the given session.
+     *
+     * @param session the current session
+     */
     public GraduateCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the graduate command.
+     * Expects: graduate <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

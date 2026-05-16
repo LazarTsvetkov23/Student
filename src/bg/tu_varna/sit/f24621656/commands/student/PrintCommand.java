@@ -5,11 +5,29 @@ import bg.tu_varna.sit.f24621656.commands.CommandResult;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Prints detailed information about a student.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class PrintCommand extends BaseCommand {
+    /**
+     * Constructs a PrintCommand with the given session.
+     *
+     * @param session the current session
+     */
     public PrintCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the print command.
+     * Expects: print <fn>
+     *
+     * @param args command arguments
+     * @return CommandResult with student information or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

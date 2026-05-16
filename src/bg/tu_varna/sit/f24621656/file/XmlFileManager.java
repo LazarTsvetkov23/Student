@@ -16,9 +16,22 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles XML serialization and deserialization.
+ * Saves all university data to an XML file and loads it back.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class XmlFileManager {
+    /** Current directory used for relative file paths. */
     private static String currentDirectory = "";
 
+    /**
+     * Sets the current directory for file operations.
+     *
+     * @param dir the new current directory (empty string for current working directory)
+     */
     public static void setCurrentDirectory(String dir) {
         if (dir == null || dir.isEmpty()) {
             currentDirectory = "";
@@ -27,6 +40,12 @@ public class XmlFileManager {
         }
     }
 
+    /**
+     * Returns the full path by combining the current directory and the filename.
+     *
+     * @param filename the file name
+     * @return full path
+     */
     public static String getFullPath(String filename) {
         if (currentDirectory.isEmpty()) {
             return filename;
@@ -34,12 +53,21 @@ public class XmlFileManager {
         return currentDirectory + "/" + filename;
     }
 
+    /**
+     * Saves all data from the repository to an XML file at the given path.
+     * Overwrites the file if it exists.
+     *
+     * @param repository the data repository containing students, specialties, disciplines
+     * @param filepath   the target file path
+     * @throws IOException if an I/O error occurs
+     */
     public static void saveAllData(DataRepository repository, String filepath) throws IOException {
         StringBuilder sb = new StringBuilder();
 
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         sb.append("<university>\n\n");
 
+        //Specialties
         sb.append("  <specialties>\n");
         for (Specialty specialty : repository.getAllSpecialties()) {
             sb.append("    <specialty>\n");
@@ -49,6 +77,7 @@ public class XmlFileManager {
         }
         sb.append("  </specialties>\n\n");
 
+        // Disciplines
         sb.append("  <disciplines>\n");
         for (Discipline discipline : repository.getAllDisciplines()) {
             sb.append("    <discipline>\n");
@@ -60,6 +89,7 @@ public class XmlFileManager {
         }
         sb.append("  </disciplines>\n\n");
 
+        // Students
         sb.append("  <students>\n");
         for (Student student : repository.getAllStudents()) {
             sb.append("    <student>\n");
@@ -90,12 +120,21 @@ public class XmlFileManager {
         writeFile(filepath, sb.toString());
     }
 
+    /**
+     * Loads all data from an XML file into the repository.
+     * Clears the repository before loading.
+     *
+     * @param repository the target repository
+     * @param filepath   the XML file path
+     * @throws IOException if the file is malformed or cannot be read
+     */
     public static void loadAllData(DataRepository repository, String filepath) throws IOException {
         if (!Files.exists(Paths.get(filepath))) return;
 
         String xml = readFile(filepath);
         repository.clear();
 
+        // Load specialties
         String specialtiesSection = extractTagContent(xml, "specialties");
         if (specialtiesSection != null) {
             List<String> items = extractTagContents(specialtiesSection, "specialty");
@@ -114,6 +153,7 @@ public class XmlFileManager {
             }
         }
 
+        // Load disciplines
         String disciplinesSection = extractTagContent(xml, "disciplines");
         List<Discipline> loadedDisciplines = new ArrayList<>();
         if (disciplinesSection != null) {
@@ -142,12 +182,14 @@ public class XmlFileManager {
             }
         }
 
+        // Attach disciplines to specialties
         for (Specialty specialty : repository.getAllSpecialties()) {
             for (Discipline discipline : loadedDisciplines) {
                 specialty.addDiscipline(discipline);
             }
         }
 
+        // Load students
         String studentsSection = extractTagContent(xml, "students");
         if (studentsSection != null) {
             List<String> items = extractTagContents(studentsSection, "student");
@@ -171,6 +213,7 @@ public class XmlFileManager {
                 Student student = new Student(name, fn, course, specialty, group);
                 student.setStatus(status);
 
+                // Load grades
                 String gradesSection = extractTagContent(item, "grades");
                 if (gradesSection != null) {
                     List<String> gradeItems = extractTagContents(gradesSection, "grade");
@@ -184,6 +227,7 @@ public class XmlFileManager {
                     }
                 }
 
+                // Load enrolled disciplines
                 String enrolledSection = extractTagContent(item, "enrolledDisciplines");
                 if (enrolledSection != null) {
                     List<String> enrolledItems = extractTagContents(enrolledSection, "discipline");
@@ -200,6 +244,7 @@ public class XmlFileManager {
         }
     }
 
+    // Private helper methods for file I/O and XML parsing
     private static String readFile(String filepath) throws IOException {
         return new String(Files.readAllBytes(Paths.get(filepath)), StandardCharsets.UTF_8);
     }

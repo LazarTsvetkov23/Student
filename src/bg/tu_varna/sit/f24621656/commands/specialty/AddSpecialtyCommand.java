@@ -6,11 +6,30 @@ import bg.tu_varna.sit.f24621656.models.Discipline;
 import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Adds a new specialty to the system.
+ * The new specialty automatically receives all existing disciplines.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class AddSpecialtyCommand extends BaseCommand {
+    /**
+     * Constructs an AddSpecialtyCommand with the given session.
+     *
+     * @param session the current session
+     */
     public AddSpecialtyCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the add specialty command.
+     * Expects: addspecialty "<name>" <minCredits>
+     *
+     * @param args command arguments
+     * @return CommandResult with success or error message
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

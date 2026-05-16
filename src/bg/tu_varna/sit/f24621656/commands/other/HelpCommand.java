@@ -5,13 +5,32 @@ import bg.tu_varna.sit.f24621656.contracts.Command;
 
 import java.util.Map;
 
+/**
+ * Displays a help message listing all available commands with brief descriptions.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class HelpCommand implements Command {
+    /** Map of all registered commands. */
     private final Map<String, Command> commands;
 
+    /**
+     * Constructs a HelpCommand with the command registry.
+     *
+     * @param commands the map of command names to Command instances
+     */
     public HelpCommand(Map<String, Command> commands) {
         this.commands = commands;
     }
 
+    /**
+     * Executes the help command.
+     * Builds and returns a formatted list of commands.
+     *
+     * @param args no arguments expected
+     * @return CommandResult with the help message
+     */
     @Override
     public CommandResult execute(String[] args) {
         StringBuilder sb = new StringBuilder();

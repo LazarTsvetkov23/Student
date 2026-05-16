@@ -9,11 +9,29 @@ import bg.tu_varna.sit.f24621656.session.Session;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Prints all enrolled students in a given specialty and course (year).
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class PrintAllCommand extends BaseCommand {
+    /**
+     * Constructs a PrintAllCommand with the given session.
+     *
+     * @param session the current session
+     */
     public PrintAllCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the printall command.
+     * Expected format: printall "<program>" <year>
+     *
+     * @param args command arguments
+     * @return CommandResult with the list of students or an empty message
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

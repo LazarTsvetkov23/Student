@@ -7,11 +7,29 @@ import bg.tu_varna.sit.f24621656.session.Session;
 
 import java.util.List;
 
+/**
+ * Lists all specialties currently in the system.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class ListSpecialtiesCommand extends BaseCommand {
+    /**
+     * Constructs a ListSpecialtiesCommand with the given session.
+     *
+     * @param session the current session
+     */
     public ListSpecialtiesCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the list specialties command.
+     * Displays each specialty with its minimum elective credits.
+     *
+     * @param args no arguments expected
+     * @return CommandResult with the list or an empty message
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {

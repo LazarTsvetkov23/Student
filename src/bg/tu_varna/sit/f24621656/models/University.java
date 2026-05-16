@@ -5,16 +5,33 @@ import bg.tu_varna.sit.f24621656.contracts.DataRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * In-memory implementation of the DataRepository interface.
+ * Stores students, specialties and disciplines in ArrayLists.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class University implements DataRepository {
+
+    /** List of all students. */
     private final List<Student> students;
+
+    /** List of all specialties. */
     private final List<Specialty> specialties;
+
+    /** List of all disciplines. */
     private final List<Discipline> disciplines;
 
+    /**
+     * Constructs an empty university repository.
+     */
     public University() {
         this.students = new ArrayList<>();
         this.specialties = new ArrayList<>();
         this.disciplines = new ArrayList<>();
     }
+
 
     @Override
     public void addStudent(Student student) {
@@ -38,6 +55,12 @@ public class University implements DataRepository {
         return new ArrayList<>(students);
     }
 
+    /**
+     * Returns students enrolled in the given discipline, sorted by faculty number (bubble sort).
+     *
+     * @param discipline the discipline to filter by
+     * @return sorted list of students
+     */
     @Override
     public List<Student> getStudentsForProtocol(Discipline discipline) {
         List<Student> result = new ArrayList<>();

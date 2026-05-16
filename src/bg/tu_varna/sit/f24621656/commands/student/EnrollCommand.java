@@ -6,11 +6,29 @@ import bg.tu_varna.sit.f24621656.models.Specialty;
 import bg.tu_varna.sit.f24621656.models.Student;
 import bg.tu_varna.sit.f24621656.session.Session;
 
+/**
+ * Enrolls a new student in the first course of a specialty.
+ *
+ * @author Lazar Tsvetkov
+ * @version 1.0
+ */
 public class EnrollCommand extends BaseCommand {
+    /**
+     * Constructs an EnrollCommand with the given session.
+     *
+     * @param session the current session
+     */
     public EnrollCommand(Session session) {
         super(session);
     }
 
+    /**
+     * Executes the enroll command.
+     * Expected format: enroll <fn> "<program>" <group> "<name>"
+     *
+     * @param args command arguments
+     * @return CommandResult indicating success or error
+     */
     @Override
     public CommandResult execute(String[] args) {
         try {
