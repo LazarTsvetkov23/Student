@@ -129,7 +129,9 @@ public class XmlFileManager {
      * @throws IOException if the file is malformed or cannot be read
      */
     public static void loadAllData(DataRepository repository, String filepath) throws IOException {
-        if (!Files.exists(Paths.get(filepath))) return;
+        if (!Files.exists(Paths.get(filepath))) {
+            return;
+        }
 
         String xml = readFile(filepath);
         repository.clear();
