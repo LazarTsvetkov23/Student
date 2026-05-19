@@ -34,7 +34,7 @@ public class AddSpecialtyCommand extends BaseCommand {
     public CommandResult execute(String[] args) {
         try {
             if (args.length < 3) {
-                return CommandResult.error("Usage: addspecialty \"<name>\" <minCredits>");
+                return CommandResult.error("Too many arguments. Usage: addspecialty \"<name>\" <minCredits>");
             }
 
             if (!getSession().isFileOpen()) {
@@ -55,6 +55,9 @@ public class AddSpecialtyCommand extends BaseCommand {
             if (creditsIndex == -1) {
                 return CommandResult.error("Min credits must be a number (e.g., 20)");
             }
+            if (creditsIndex < args.length - 1) {
+                return CommandResult.error("Too many arguments. Usage: addspecialty \"<name>\" <minCredits>");
+            }
 
             int minCredits = Integer.parseInt(args[creditsIndex]);
 
@@ -72,6 +75,9 @@ public class AddSpecialtyCommand extends BaseCommand {
             String rawName = nameBuilder.toString();
 
             if (!rawName.startsWith("\"") || !rawName.endsWith("\"")) {
+                if (args.length > 3) {
+                    return CommandResult.error("Too many arguments. Usage: addspecialty \"<name>\" <minCredits>");
+                }
                 return CommandResult.error("Specialty name must be enclosed in quotes: \"<name>\"");
             }
 
